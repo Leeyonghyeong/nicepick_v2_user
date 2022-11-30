@@ -1,0 +1,36 @@
+@import './variables';
+
+@mixin mobile {
+  @media (max-width: #{$breakpoint-tablet - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$breakpoint-tablet}) and (max-width: #{$breakpoint-pc - 1px}) {
+    @content;
+  }
+}
+
+@mixin pc {
+  @media (min-width: #{$breakpoint-pc}) {
+    @content;
+  }
+}
+
+@mixin pc-container {
+  width: 1194px;
+  margin: 0 auto;
+}
+
+@mixin tablet-container {
+  width: 100%;
+  padding: 0 44px;
+  box-sizing: border-box;
+}
+
+@mixin mobile-container {
+  width: 100%;
+  padding: 0 24px;
+  box-sizing: border-box;
+}

@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "description": "Node Version 16.18.1 Nicepick User Responsive Web",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev -p 2000",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxtjs/eslint-config-typescript": "^12.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-vue": "^9.8.0",
+    "nuxt": "3.0.0",
+    "sass": "^1.56.1",
+    "sass-loader": "^13.2.0",
+    "typescript": "^4.9.3",
+    "vue-eslint-parser": "^9.1.0"
+  }
+}
