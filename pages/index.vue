@@ -1,6 +1,6 @@
 <template>
   <main>
-    <div></div>
+    <div>main</div>
   </main>
 </template>
 
@@ -10,7 +10,7 @@
 main {
   div {
     width: 100px;
-    height: 6000px;
+    height: 500px;
   }
 }
 </style>

@@ -23,7 +23,7 @@
           <div class="menu">
             창업톡<img src="~/assets/img/header/community.png" alt="창업톡" />
           </div>
-          <div class="menu">창업문의</div>
+          <div class="menu">성공 창업상담</div>
           <div class="menu">오늘뭐먹지?</div>
         </nav>
       </article>

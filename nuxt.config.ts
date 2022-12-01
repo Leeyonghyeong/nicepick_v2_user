@@ -51,6 +51,7 @@ export default defineNuxtConfig({
   typescript: {
     shim: false,
   },
+  css: ['~/assets/scss/font.scss'],
   vite: {
     css: {
       preprocessorOptions: {

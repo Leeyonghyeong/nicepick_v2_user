@@ -57,7 +57,7 @@
         </div>
       </div>
       <div class="menu">
-        <div>창업문의</div>
+        <div>성공 창업상담</div>
       </div>
       <div class="menu">
         <div>오늘 뭐 먹지?</div>
