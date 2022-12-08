@@ -21,7 +21,7 @@
       <div class="event-list">
         <div class="event-item">
           <div class="event-image">
-            <img src="~/assets/img/event/event1.png" alt="event1" />
+            <img src="~/assets/img/EVENT/event1.png" alt="event1" />
           </div>
           <div class="event-name">대국민 월세 지원 이벤트</div>
           <div class="event-date">2022.06.01 ~ 2022.12.31</div>
@@ -29,14 +29,14 @@
 
         <div class="event-item">
           <div class="event-image">
-            <img src="~/assets/img/event/event2.png" alt="event2" />
+            <img src="~/assets/img/EVENT/event2.png" alt="event2" />
           </div>
           <div class="event-name">2022 카타르 월드컵 응원댓글 이벤트</div>
           <div class="event-date">2022.11.07 ~ 2022.12.03</div>
         </div>
         <div class="event-item">
           <div class="event-image">
-            <img src="~/assets/img/event/event3.png" alt="event3" />
+            <img src="~/assets/img/EVENT/event3.png" alt="event3" />
           </div>
           <div class="event-name">My공인중개사 사전가입 이벤트</div>
           <div class="event-date">2022.06.16 ~ 2022.07.30</div>
