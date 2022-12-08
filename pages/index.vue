@@ -1,6 +1,16 @@
 <template>
   <main>
-    <div>main</div>
+    <MainBanner />
+    <MainCategory />
+    <CommonAdBanner />
+    <MainBrandExpect />
+    <MainBrandYoutube />
+    <CommonAdBanner background-color="#e9598d" />
+    <MainRankAndFavoriteBrand />
+    <CommonAdBanner background-color="#015939" />
+    <MainBrandTheme />
+    <MainEvent />
+    <MainGuideAndCalculator />
   </main>
 </template>
 

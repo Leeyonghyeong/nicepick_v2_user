@@ -190,6 +190,24 @@ const showDropdown = (index: number): void => {
   .side-menu-bar {
     .side-menu {
       width: 100%;
+
+      .menu {
+        padding: 0 23px 0 24px;
+
+        &.side-menu-top {
+          padding: 0 24px;
+        }
+
+        &.drop-down-menu {
+          .drop-down {
+            padding: 0 23px 0 24px;
+          }
+
+          .drop-down-menu-list {
+            padding: 0 23px;
+          }
+        }
+      }
     }
   }
 }

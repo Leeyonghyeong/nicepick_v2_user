@@ -6,6 +6,8 @@
 </template>
 
 <script setup lang="ts">
+import { useWindowStore } from '~/store/window'
+
 const channelIO = `
 (function() {
     var w = window;
@@ -46,4 +48,14 @@ const channelIO = `
     "pluginKey": "4f2442f3-b05c-4409-b045-9f1e92d19ce9"
   });
 `
+
+const store = useWindowStore()
+
+onMounted(() => {
+  store.windowWidth = window.innerWidth
+
+  window.addEventListener('resize', () => {
+    store.$patch({ windowWidth: window.innerWidth })
+  })
+})
 </script>

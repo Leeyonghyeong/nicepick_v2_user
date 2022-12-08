@@ -142,8 +142,11 @@ footer {
       }
     }
   }
+}
+@include mobile {
+  footer {
+    height: auto;
 
-  @include mobile {
     section {
       @include mobile-container();
       padding-top: 20px;

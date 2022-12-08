@@ -121,6 +121,8 @@ header {
   height: 60px;
   border-bottom: 1px solid $sectionLine;
   box-sizing: border-box;
+  z-index: 101;
+  background-color: #fff;
 
   .header-main {
     height: 100%;
