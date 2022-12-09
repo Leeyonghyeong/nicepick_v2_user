@@ -254,6 +254,10 @@ section {
             }
           }
         }
+
+        .re-load {
+          margin-top: 4px;
+        }
       }
     }
   }
@@ -316,9 +320,9 @@ section {
 
 @include mobile {
   section {
-    height: 756px;
+    height: auto;
     padding-top: 30px;
-    margin-bottom: 30px;
+    margin-bottom: 0;
 
     article {
       @include mobile-container();
@@ -357,9 +361,11 @@ section {
 
         .youtube-thumbnail-list {
           margin-left: 0;
+          padding-bottom: 30px;
 
           .youtube-thumbnail-list-items {
             .item {
+              margin-bottom: 8px;
               img {
                 width: 160px;
                 height: 92px;
@@ -376,6 +382,10 @@ section {
                 }
               }
             }
+          }
+
+          .re-load {
+            margin-top: 12px;
           }
         }
       }
