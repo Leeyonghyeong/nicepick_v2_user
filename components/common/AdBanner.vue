@@ -33,7 +33,6 @@ section {
       display: flex;
       justify-content: space-between;
       padding: 0 10%;
-      box-sizing: border-box;
       color: #fff;
       height: 100%;
       background-color: #4c7eca;

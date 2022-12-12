@@ -26,11 +26,9 @@
 @mixin tablet-container {
   width: 100%;
   padding: 0 44px;
-  box-sizing: border-box;
 }
 
 @mixin mobile-container {
   width: 100%;
   padding: 0 24px;
-  box-sizing: border-box;
 }

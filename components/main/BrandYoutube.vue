@@ -145,7 +145,6 @@ getBrandItems()
 section {
   background-color: #f8f8f8;
   height: 650px;
-  box-sizing: border-box;
   padding-top: 60px;
   margin-bottom: 80px;
 

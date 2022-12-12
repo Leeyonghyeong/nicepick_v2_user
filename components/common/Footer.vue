@@ -25,9 +25,33 @@
 
       <article class="company-info">
         <div class="footer-link">
-          <div>개인정보 수집 및 이용동의</div>
-          <div>서비스 이용약관</div>
-          <div>마케팅 정보 수신 동의</div>
+          <div
+            @click="
+              moveFooterLink(
+                'https://nicepick.notion.site/b92941c41e6e4986b60a197ac607f1da'
+              )
+            "
+          >
+            개인정보 수집 및 이용동의
+          </div>
+          <div
+            @click="
+              moveFooterLink(
+                'https://nicepick.notion.site/112ba598e8d34c39b6b3ab29d6c9e34a'
+              )
+            "
+          >
+            서비스 이용약관
+          </div>
+          <div
+            @click="
+              moveFooterLink(
+                'https://nicepick.notion.site/e5db5ba7dd064fea86a0a0057d042654'
+              )
+            "
+          >
+            마케팅 정보 수신 동의
+          </div>
         </div>
         <div class="info">
           <div>
@@ -44,7 +68,21 @@
   </footer>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { storeToRefs } from 'pinia'
+import { useWindowStore } from '~~/store/window'
+
+const windowStore = useWindowStore()
+const { getDevice } = storeToRefs(windowStore)
+
+const moveFooterLink = (url: string) => {
+  if (getDevice.value === 'pc') {
+    window.open(url, '_blank')
+  } else {
+    window.location.href = url
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 footer {
@@ -64,7 +102,6 @@ footer {
       align-items: center;
       border-radius: 10px;
       padding: 0 20px;
-      box-sizing: border-box;
 
       .qna-info {
         display: flex;

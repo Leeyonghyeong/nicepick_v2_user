@@ -8,6 +8,7 @@
         <nav class="main-menu">
           <div
             class="menu"
+            :class="{ active: activeMenu === '브랜드' }"
             @mouseover="showSubMenu($event, '브랜드')"
             @mouseleave="closeSubMenu"
           >
@@ -15,6 +16,7 @@
           </div>
           <div
             class="menu"
+            :class="{ active: activeMenu === '상권분석' }"
             @mouseover="showSubMenu($event, '상권분석')"
             @mouseleave="closeSubMenu"
           >
@@ -29,7 +31,11 @@
       </article>
       <article class="header-right">
         <div><img src="~/assets/img/header/search.png" alt="검색" /></div>
-        <div><img src="~/assets/img/header/mypage.png" alt="마이페이지" /></div>
+        <div>
+          <NuxtLink to="/signin"
+            ><img src="~/assets/img/header/mypage.png" alt="마이페이지"
+          /></NuxtLink>
+        </div>
         <div id="mMenu">
           <img
             src="~/assets/img/header/menu.png"
@@ -84,6 +90,7 @@ const subMenu: SubMenu = {
 }
 
 const currentMenu = ref<string>('')
+const activeMenu = ref<string>('')
 const isShowSubMenu = ref<boolean>(false)
 const subMenuEl = ref<HTMLElement | null>(null)
 
@@ -91,6 +98,7 @@ const isShowSideBar = ref<boolean>(false)
 
 const showSubMenu = (event: Event, key: string): void => {
   currentMenu.value = key
+  activeMenu.value = key
   isShowSubMenu.value = true
 
   const target = event.target as HTMLDivElement
@@ -103,10 +111,12 @@ const showSubMenu = (event: Event, key: string): void => {
 
 const keepSubMenu = () => {
   isShowSubMenu.value = true
+  activeMenu.value = currentMenu.value
 }
 
 const closeSubMenu = () => {
   isShowSubMenu.value = false
+  activeMenu.value = ''
 }
 
 const showAndCloseSideBar = () => {
@@ -120,7 +130,6 @@ header {
   top: 0;
   height: 60px;
   border-bottom: 1px solid $sectionLine;
-  box-sizing: border-box;
   z-index: 101;
   background-color: #fff;
 
@@ -166,7 +175,6 @@ header {
           border: 1px solid $sectionLine;
           border-radius: 50px;
           color: $fontSubColor;
-          cursor: pointer;
         }
       }
     }
@@ -239,7 +247,8 @@ header {
           position: relative;
           font-size: 15px;
 
-          &:hover {
+          &:hover,
+          &.active {
             &::after {
               content: '';
               width: 100%;
@@ -268,7 +277,9 @@ header {
 
   .p-sub-menu {
     height: 50px;
+    border-top: 1px solid $sectionLine;
     border-bottom: 1px solid $sectionLine;
+    background-color: #fff;
 
     .sub-menu {
       display: flex;

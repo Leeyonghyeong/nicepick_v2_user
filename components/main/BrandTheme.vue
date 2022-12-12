@@ -81,8 +81,8 @@ import api from '~/config/axios.config'
 import { useWindowStore } from '~~/store/window'
 import { Brand } from '~~/types/brand'
 
-const store = useWindowStore()
-const { getDevice } = storeToRefs(store)
+const windowStore = useWindowStore()
+const { getDevice } = storeToRefs(windowStore)
 
 const themeBrandItems = ref<Brand[]>([])
 

@@ -125,7 +125,6 @@ const showDropdown = (index: number): void => {
       &.side-menu-top {
         height: 60px;
         border-bottom: 1px solid $sectionLine;
-        box-sizing: border-box;
         padding: 0 44px 0 30px;
 
         button {
@@ -145,7 +144,6 @@ const showDropdown = (index: number): void => {
 
         .drop-down {
           padding: 0 44px 0 40px;
-          box-sizing: border-box;
           height: 50px;
           display: flex;
           justify-content: space-between;

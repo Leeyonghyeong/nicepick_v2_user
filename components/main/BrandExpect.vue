@@ -52,8 +52,8 @@ import { useWindowStore } from '~~/store/window'
 import api from '~/config/axios.config'
 import { Brand } from '~/types/brand'
 
-const store = useWindowStore()
-const { getDevice } = storeToRefs(store)
+const windowStore = useWindowStore()
+const { getDevice } = storeToRefs(windowStore)
 
 const brandItems = ref<Brand[]>([])
 const nextPage = ref<boolean>(false)

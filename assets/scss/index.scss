@@ -19,3 +19,41 @@
     }
   }
 }
+
+* {
+  box-sizing: border-box;
+}
+
+input:focus, select:focus, option:focus, textarea:focus, button:focus {
+  outline: none;
+}
+
+input, select, potion, textarea, button {
+  border: none;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+button {
+  cursor: pointer;
+}
+
+input {
+  font-size: 16px;
+  color: $fontMainColor;
+  
+  &::placeholder {
+    color: $placeholderFontColor;
+  }
+
+  &.input-default {
+    height: 50px;
+    border: 1px solid $inputLine;
+    border-radius: 10px;
+
+    &:focus {
+      border-color: $mainColor;
+    }
+  }
+}

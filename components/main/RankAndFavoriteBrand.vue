@@ -99,8 +99,8 @@ type Rank = {
   variance: number | string
 }
 
-const store = useWindowStore()
-const { getDevice } = storeToRefs(store)
+const windowStore = useWindowStore()
+const { getDevice } = storeToRefs(windowStore)
 
 const currentRank = ref<Rank[]>([])
 const lastRank = ref<Rank[]>([])
@@ -206,7 +206,6 @@ section {
         height: 515px;
         width: 276px;
         padding: 40px 26px;
-        box-sizing: border-box;
         display: flex;
         justify-content: space-between;
         flex-direction: column;
@@ -295,7 +294,6 @@ section {
             border-width: 1px;
             border-color: #ebebeb;
             border-style: solid;
-            box-sizing: border-box;
             border-top-right-radius: 10px;
             border-bottom-right-radius: 10px;
             .category-name {

@@ -24,8 +24,8 @@
 import { storeToRefs } from 'pinia'
 import { useWindowStore } from '~~/store/window'
 
-const store = useWindowStore()
-const { getDevice } = storeToRefs(store)
+const windowStore = useWindowStore()
+const { getDevice } = storeToRefs(windowStore)
 </script>
 
 <style lang="scss" scoped>

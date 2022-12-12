@@ -46,6 +46,12 @@ export default defineNuxtConfig({
           href: 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css',
         },
       ],
+      script: [
+        {
+          crossorigin: 'anonymous',
+          src: 'https://kit.fontawesome.com/a418912500.js',
+        },
+      ],
     },
   },
   typescript: {

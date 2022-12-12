@@ -49,13 +49,13 @@ const channelIO = `
   });
 `
 
-const store = useWindowStore()
+const windowStore = useWindowStore()
 
 onMounted(() => {
-  store.windowWidth = window.innerWidth
+  windowStore.windowWidth = window.innerWidth
 
   window.addEventListener('resize', () => {
-    store.$patch({ windowWidth: window.innerWidth })
+    windowStore.$patch({ windowWidth: window.innerWidth })
   })
 })
 </script>
