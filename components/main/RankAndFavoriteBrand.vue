@@ -92,18 +92,16 @@ import api from '~/config/axios.config'
 import { useWindowStore } from '~~/store/window'
 import { Brand } from '~~/types/brand'
 import { CategoryColor } from '~~/types/category'
-
-type Rank = {
-  keyword: string
-  rank: number
-  variance: number | string
-}
+import { useKeywordRankStore } from '~~/store/keywordRank'
 
 const windowStore = useWindowStore()
 const { getDevice } = storeToRefs(windowStore)
+const keywordRankStore = useKeywordRankStore()
+const { currentRank } = storeToRefs(keywordRankStore)
 
-const currentRank = ref<Rank[]>([])
-const lastRank = ref<Rank[]>([])
+if (currentRank.value.length === 0) {
+  keywordRankStore.addKeywordRank()
+}
 
 const favoriteBrandItems = ref<Brand[]>([])
 const page = ref<number>(1)
@@ -113,31 +111,6 @@ const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
   return getDevice.value === 'pc' ? 12 : getDevice.value === 'tablet' ? 8 : 4
 })
-
-const getRank = async () => {
-  const { data } = await api.get('/search/rank')
-
-  if (data.success) {
-    currentRank.value = data.currentRank
-    lastRank.value = data.lastRank
-
-    currentRank.value.map((current) => {
-      const test = lastRank.value.find(
-        (last) => current.keyword === last.keyword
-      )
-
-      if (test) {
-        current.variance = test.rank - current.rank
-      } else {
-        current.variance = 'new'
-      }
-
-      return current
-    })
-  } else {
-    alert('주간 검색 순위 요청 실패')
-  }
-}
 
 const getFavoriteBrand = async () => {
   const { data } = await api.get(
@@ -168,8 +141,6 @@ const changePage = (type: string): void => {
     getFavoriteBrand()
   }
 }
-
-getRank()
 
 onMounted(() => {
   getFavoriteBrand()

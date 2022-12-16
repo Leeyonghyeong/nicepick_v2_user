@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { calcTotalPage } from '~~/function/page'
+import { calcTotalPage } from '~~/function/common'
 
 defineProps<{
   title: string

@@ -1,16 +1,18 @@
 <template>
   <main>
-    <SignSignin />
+    <Search />
   </main>
 </template>
 
 <script lang="ts" setup>
 definePageMeta({
-  layout: 'empty',
+  layout: 'mobile',
 })
 
+const route = useRoute()
+
 useHead({
-  title: '창업할 땐 창업픽 - 로그인',
+  title: `창업할 땐 창업픽 - ${route.query.keyword}`,
 })
 </script>
 

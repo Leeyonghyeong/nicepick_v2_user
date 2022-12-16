@@ -3,7 +3,9 @@
     <section class="header-main">
       <article class="header-left">
         <div class="logo">
-          <img src="~/assets/img/logo.png" alt="창업픽" />
+          <NuxtLink to="/">
+            <img src="~/assets/img/logo.png" alt="창업픽" />
+          </NuxtLink>
         </div>
         <nav class="main-menu">
           <div
@@ -30,7 +32,13 @@
         </nav>
       </article>
       <article class="header-right">
-        <div><img src="~/assets/img/header/search.png" alt="검색" /></div>
+        <div>
+          <img
+            src="~/assets/img/header/search.png"
+            alt="검색"
+            @click="isShowSearchModal = true"
+          />
+        </div>
         <div>
           <NuxtLink to="/signin"
             ><img src="~/assets/img/header/mypage.png" alt="마이페이지"
@@ -40,7 +48,7 @@
           <img
             src="~/assets/img/header/menu.png"
             alt="메뉴"
-            @click="showAndCloseSideBar"
+            @click="showAndCloseSideMenuModal"
           />
         </div>
         <div id="pCompany"><button>기업 홈</button></div>
@@ -59,16 +67,20 @@
       </nav>
     </section>
 
-    <SideMenuBar
-      v-if="isShowSideBar"
+    <SideMenuModal
+      v-if="isShowSideMenuModal"
       :sub-menu="subMenu"
-      @show-and-close-side-bar="showAndCloseSideBar"
+      @show-and-close-side-menu-modal="showAndCloseSideMenuModal"
     />
   </header>
+  <ModalSearchModal
+    v-if="isShowSearchModal"
+    @close-search-modal="closeSearchModal"
+  />
 </template>
 
 <script lang="ts" setup>
-import SideMenuBar from './SideMenuBar.vue'
+import SideMenuModal from '../modal/SideMenuModal.vue'
 
 type SubMenu = {
   [key: string]: {
@@ -80,7 +92,7 @@ type SubMenu = {
 const subMenu: SubMenu = {
   브랜드: [
     { menuName: '프로모션', url: '' },
-    { menuName: '랭킹', url: '' },
+    { menuName: '지역별 브랜드 랭킹', url: '' },
     { menuName: '브랜드 비교', url: '' },
   ],
   상권분석: [
@@ -94,7 +106,8 @@ const activeMenu = ref<string>('')
 const isShowSubMenu = ref<boolean>(false)
 const subMenuEl = ref<HTMLElement | null>(null)
 
-const isShowSideBar = ref<boolean>(false)
+const isShowSideMenuModal = ref<boolean>(false)
+const isShowSearchModal = ref<boolean>(false)
 
 const showSubMenu = (event: Event, key: string): void => {
   currentMenu.value = key
@@ -119,8 +132,12 @@ const closeSubMenu = () => {
   activeMenu.value = ''
 }
 
-const showAndCloseSideBar = () => {
-  isShowSideBar.value = !isShowSideBar.value
+const showAndCloseSideMenuModal = () => {
+  isShowSideMenuModal.value = !isShowSideMenuModal.value
+}
+
+const closeSearchModal = () => {
+  isShowSearchModal.value = false
 }
 </script>
 

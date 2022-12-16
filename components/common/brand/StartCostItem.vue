@@ -1,7 +1,22 @@
 <template>
   <div class="brand-start-cost-item">
     <div class="brand-image">
-      <img :src="brandItem.brandImg" :alt="brandItem.brandName" />
+      <img
+        v-if="brandItem.brandImg"
+        :src="brandItem.brandImg"
+        :alt="brandItem.brandName"
+      />
+      <img
+        v-else
+        :src="
+          loadCategoryImg(
+            brandItem.largeCategoryName,
+            brandItem.smallCategoryName
+          )
+        "
+        :alt="brandItem.brandName"
+        class="default-image"
+      />
       <div
         v-if="
           brandItem.isPremium &&
@@ -23,19 +38,50 @@
     </div>
     <div class="brand-name">{{ brandItem.brandName }}</div>
     <div class="brand-start-cost">
-      <div>창업비 10억 1,000만원</div>
-      <div>100㎡</div>
+      <div>
+        창업비 {{ calcStartCost(brandItem.brandStartCost.startTotalPrice) }}
+      </div>
+      <div>{{ brandItem.brandStartCost.standardArea }}㎡</div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { CategoryColor } from '~~/types/category'
 import { Brand } from '~~/types/brand'
+import { calcStartCost } from '~/function/common'
+import { useCategoryStore } from '~~/store/category'
 
 defineProps<{
   brandItem: Brand
 }>()
+
+const categoryStore = useCategoryStore()
+const { category } = storeToRefs(categoryStore)
+
+const loadCategoryImg = (
+  largeCategoryName: string,
+  smallCategoryName: string
+): string => {
+  const largeCategory = category.value.find(
+    (category) => category.categoryName === largeCategoryName
+  )
+
+  let url = ''
+
+  if (largeCategory) {
+    const smallCategory = largeCategory.smallCategory.find(
+      (category) => category.categoryName === smallCategoryName
+    )
+
+    if (smallCategory) {
+      url = smallCategory.categoryImg
+    }
+  }
+
+  return url
+}
 </script>
 
 <style lang="scss" scoped>
@@ -49,6 +95,10 @@ defineProps<{
     margin-bottom: 10px;
     position: relative;
     overflow: hidden;
+    background-color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     .promotion-icon {
       position: absolute;
@@ -64,6 +114,11 @@ defineProps<{
     img {
       width: 100%;
       height: 100%;
+
+      &.default-image {
+        width: 50%;
+        height: 50%;
+      }
     }
   }
 

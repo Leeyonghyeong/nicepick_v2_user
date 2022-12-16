@@ -2,21 +2,14 @@
   <section>
     <article v-if="category.length > 0">
       <div class="item-wrapper">
-        <div v-for="index in 5" :key="index" class="category-item">
-          <img
-            :src="category[index - 1].mainImg"
-            :alt="category[index - 1].categoryName"
-          />
-          <div>{{ category[index - 1].categoryName }}</div>
-        </div>
-      </div>
-      <div class="item-wrapper">
-        <div v-for="index in 5" :key="index" class="category-item">
-          <img
-            :src="category[index + 5 - 1].mainImg"
-            :alt="category[index + 5 - 1].categoryName"
-          />
-          <div>{{ category[index + 5 - 1].categoryName }}</div>
+        <div
+          v-for="item in category"
+          :key="item.id"
+          class="category-item"
+          @click="moveCategoryPage(item.categoryName)"
+        >
+          <img :src="item.mainImg" :alt="item.categoryName" />
+          <div>{{ item.categoryName }}</div>
         </div>
       </div>
     </article>
@@ -24,20 +17,21 @@
 </template>
 
 <script lang="ts" setup>
-import api from '~/config/axios.config'
-import { LargeCategory } from '~/types/category'
+import { storeToRefs } from 'pinia'
+import { useCategoryStore } from '~~/store/category'
 
-const category = ref<LargeCategory[]>([])
+const categoryStore = useCategoryStore()
+const { category } = storeToRefs(categoryStore)
 
-onMounted(async () => {
-  const { data } = await api.get('/category')
+if (category.value.length === 0) {
+  categoryStore.addCategory()
+}
 
-  if (data.success) {
-    category.value = data.largeCategory
-  } else {
-    alert('카테고리 요청 실패')
-  }
-})
+const router = useRouter()
+
+const moveCategoryPage = (l: string) => {
+  router.push(`/category?l=${l}`)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -46,13 +40,13 @@ section {
   article {
     @include pc-container();
     margin-top: 30px;
-    display: flex;
     justify-content: space-between;
 
     .item-wrapper {
-      display: flex;
+      display: grid;
+      gap: 0;
+      grid-template-columns: repeat(10, calc(100% / 10));
       .category-item {
-        width: 119px;
         height: 110px;
         display: flex;
         flex-direction: column;
@@ -77,8 +71,6 @@ section {
       @include tablet-container();
       margin-top: 30px;
       .item-wrapper {
-        width: calc(100% / 2.1);
-        justify-content: space-between;
         .category-item {
           font-size: 12px;
           height: auto;
@@ -102,18 +94,12 @@ section {
       justify-content: space-between;
 
       .item-wrapper {
-        justify-content: space-between;
-        padding: 0 20px;
+        gap: 14px 0;
+        grid-template-columns: repeat(5, calc(100% / 5));
 
-        &:first-child {
-          .category-item {
-            margin-bottom: 14px;
-          }
-        }
         .category-item {
           font-size: 11px;
           height: auto;
-          width: 40px;
 
           div {
             text-align: center;

@@ -1,6 +1,6 @@
 <template>
   <main>
-    <SignSignin />
+    <SignSignup />
   </main>
 </template>
 
@@ -10,7 +10,7 @@ definePageMeta({
 })
 
 useHead({
-  title: '창업할 땐 창업픽 - 로그인',
+  title: '창업할 땐 창업픽 - 회원가입',
 })
 </script>
 

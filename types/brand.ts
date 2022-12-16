@@ -16,6 +16,7 @@ export interface Brand {
 export interface BrandStartCost {
   totalFee: string
   standardArea: string
+  startTotalPrice: string
 }
 
 export interface BrandYoutube {

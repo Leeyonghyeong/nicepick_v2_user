@@ -1,5 +1,5 @@
 <template>
-  <section class="side-menu-bar" @click="$emit('showAndCloseSideBar')">
+  <section class="side-menu-bar" @click="$emit('showAndCloseSideMenuModal')">
     <div class="side-menu" @click.stop>
       <div class="side-menu-top menu">
         <div><button>기업 홈</button></div>
@@ -7,7 +7,7 @@
           <img
             src="~/assets/img/close/close_black.png"
             alt="close"
-            @click="$emit('showAndCloseSideBar')"
+            @click="$emit('showAndCloseSideMenuModal')"
           />
         </div>
       </div>
@@ -79,7 +79,7 @@ defineProps<{
 }>()
 
 defineEmits<{
-  (e: 'showAndCloseSideBar'): void
+  (e: 'showAndCloseSideMenuModal'): void
 }>()
 
 onMounted(() => {

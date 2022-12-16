@@ -82,7 +82,7 @@
 import axios from 'axios'
 import api from '~/config/axios.config'
 import { Brand, BrandYoutube } from '~/types/brand'
-import { calcTotalPage } from '~~/function/page'
+import { calcTotalPage } from '~~/function/common'
 
 const brandItems = ref<Brand[]>([])
 const shuffleItems = ref<Brand[]>([])
