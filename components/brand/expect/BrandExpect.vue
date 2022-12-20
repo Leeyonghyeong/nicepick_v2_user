@@ -1,8 +1,8 @@
 <template>
   <section>
-    <article class="category-select-list">
-      <small v-if="getDevice !== 'mobile'">카테고리</small>
-      <div class="current-large-category">
+    <article class="brand-expect-top">
+      <small v-if="getDevice !== 'mobile'">앞으로가 기대되는</small>
+      <div class="brand-expect-notice">
         <img
           v-if="getDevice === 'mobile'"
           src="~/assets/img/arrow/router-back.png"
@@ -10,62 +10,25 @@
           class="back"
           @click="router.push('/')"
         />
-        <div>{{ route.query.l }}</div>
-        <div>
-          <img
-            src="~/assets/img/arrow/list_button_down.png"
-            alt="down"
-            @click="isShowLargeCategoryHandler"
-          />
-        </div>
-        <div v-if="isShowLargeCategoryList" class="large-category-list">
-          <div v-for="item in category" :key="item.id" class="large-item">
-            <NuxtLink
-              :to="`/category?l=${item.categoryName}`"
-              :class="{ active: item.categoryName === route.query.l }"
-            >
-              {{ item.categoryName }}
-            </NuxtLink>
-          </div>
-        </div>
+        <div>유망브랜드</div>
       </div>
-      <div ref="smallCategoryList" class="small-category-list">
-        <div class="small-item" :class="{ active: !route.query.s }">
-          <NuxtLink
-            :to="`/category?l=${currentLargeCategory?.categoryName}`"
-            style="height: 20px"
-            >전체
-          </NuxtLink>
+      <div ref="largeCategoryList" class="large-category-list">
+        <div class="large-item" :class="{ active: !route.query.type }">
+          <NuxtLink to="/brand/expect" style="height: 20px">전체 </NuxtLink>
         </div>
         <div
-          v-for="item in currentLargeCategory?.smallCategory"
+          v-for="item in category"
           :key="item.id"
-          class="small-item"
-          :class="{ active: route.query.s === item.categoryName }"
+          class="large-item"
+          :class="{ active: route.query.type === item.categoryName }"
         >
-          <NuxtLink
-            :to="`/category?l=${currentLargeCategory?.categoryName}&s=${item.categoryName}`"
-          >
-            <img
-              v-if="route.query.s !== item.categoryName"
-              :src="item.categoryImg"
-              :alt="item.categoryName"
-            />
-            <img
-              v-else
-              :src="item.categoryActiveImg"
-              :alt="item.categoryName"
-            />
+          <NuxtLink :to="`/brand/expect?type=${item.categoryName}`">
+            <img :src="item.mainImg" :alt="item.categoryName" />
             {{ item.categoryName }}
           </NuxtLink>
         </div>
         <div
-          v-if="
-            currentLargeCategory &&
-            currentLargeCategory.categoryName === '생활서비스' &&
-            getDevice === 'pc' &&
-            !isShowButtonLeft
-          "
+          v-if="getDevice === 'pc' && !isShowButtonLeft"
           class="page-absolute-button-right page-button"
         >
           <img
@@ -75,12 +38,7 @@
           />
         </div>
         <div
-          v-if="
-            currentLargeCategory &&
-            currentLargeCategory.categoryName === '생활서비스' &&
-            getDevice === 'pc' &&
-            isShowButtonLeft
-          "
+          v-if="getDevice === 'pc' && isShowButtonLeft"
           class="page-absolute-button-left page-button"
         >
           <img
@@ -91,8 +49,6 @@
         </div>
       </div>
     </article>
-
-    <CommonBrandRecommendBrandItem background-color="#f8fafd" />
 
     <article class="list">
       <CommonBrandFilter :total-count="totalCount" />
@@ -112,7 +68,6 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { useCategoryStore } from '~~/store/category'
-import { LargeCategory } from '~/types/category'
 import { useWindowStore } from '~~/store/window'
 import api from '~/config/axios.config'
 import { Brand } from '~~/types/brand'
@@ -129,10 +84,7 @@ if (category.value.length === 0) {
 const route = useRoute()
 const router = useRouter()
 
-const currentLargeCategory = ref<LargeCategory>()
-const isShowLargeCategoryList = ref<boolean>(false)
-
-const smallCategoryList = ref<HTMLDivElement | null>(null)
+const largeCategoryList = ref<HTMLDivElement | null>(null)
 const isShowButtonLeft = ref<boolean>(false)
 
 const brandItems = ref<Brand[]>([])
@@ -143,19 +95,13 @@ const pageNum = computed<number>(() => {
   return getDevice.value === 'pc' ? 12 : getDevice.value === 'tablet' ? 8 : 6
 })
 
-const initCurrentLargeCategory = () => {
-  currentLargeCategory.value = category.value.find(
-    (item) => item.categoryName === route.query.l
-  )
-}
-
 const scrollButtonHandler = (type: string) => {
-  if (smallCategoryList.value) {
+  if (largeCategoryList.value) {
     if (type === 'right') {
-      smallCategoryList.value.scrollLeft += 100
+      largeCategoryList.value.scrollLeft += 200
       isShowButtonLeft.value = true
     } else {
-      smallCategoryList.value.scrollLeft -= 100
+      largeCategoryList.value.scrollLeft -= 200
       isShowButtonLeft.value = false
     }
   }
@@ -163,11 +109,11 @@ const scrollButtonHandler = (type: string) => {
 
 const getBrandItems = async () => {
   page.value = 1
-  const { l, s } = route.query
+  const { type } = route.query
   const { data } = await api.get(
-    `/brand/search/category?l=${l}&s=${s}&sortType=p&type=${
-      s ? 's' : 'l'
-    }&page=${page.value}&pageNum=${pageNum.value}`
+    `/brand/search/main/ad/${page.value}?pageNum=${pageNum.value}${
+      type ? `&type=${type}` : ''
+    }`
   )
 
   if (data.success) {
@@ -179,11 +125,11 @@ const getBrandItems = async () => {
 
 const nextBrandItems = async () => {
   page.value++
-  const { l, s } = route.query
+  const { type } = route.query
   const { data } = await api.get(
-    `/brand/search/category?l=${l}&s=${s}&sortType=p&type=${
-      s ? 's' : 'l'
-    }&page=${page.value}&pageNum=${pageNum.value}`
+    `/brand/search/main/ad/${page.value}?pageNum=${pageNum.value}${
+      type ? `&type=${type}` : ''
+    }`
   )
 
   if (data.success) {
@@ -193,24 +139,9 @@ const nextBrandItems = async () => {
   }
 }
 
-const isShowLargeCategoryHandler = () => {
-  if (isShowLargeCategoryList.value) {
-    document.body.removeAttribute('style')
-    isShowLargeCategoryList.value = false
-  } else {
-    if (getDevice.value === 'mobile') {
-      document.body.setAttribute('style', 'overflow: hidden')
-    }
-
-    isShowLargeCategoryList.value = true
-  }
-}
-
 watch(
   () => route.query,
   () => {
-    isShowLargeCategoryList.value = false
-    initCurrentLargeCategory()
     getBrandItems()
   }
 )
@@ -219,7 +150,6 @@ let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)
 
 onMounted(() => {
-  initCurrentLargeCategory()
   getBrandItems()
 
   io = new IntersectionObserver(
@@ -242,7 +172,7 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 section {
-  .category-select-list {
+  .brand-expect-top {
     @include pc-container();
     position: relative;
     -ms-overflow-style: none; /* IE and Edge */
@@ -261,13 +191,15 @@ section {
       color: $fontSubColor;
     }
 
-    .current-large-category {
+    .brand-expect-notice {
       display: flex;
       position: relative;
       align-items: center;
 
       div {
         display: flex;
+        margin-top: 6px;
+
         img {
           width: 24px;
           margin-left: 8px;
@@ -307,14 +239,14 @@ section {
       }
     }
 
-    .small-category-list {
+    .large-category-list {
       margin-top: 30px;
       display: flex;
       white-space: nowrap;
       font-size: 14px;
       overflow-x: auto;
 
-      .small-item {
+      .large-item {
         padding: 9px 14px;
         border-radius: 20px;
         border: 1px solid #ebebeb;
@@ -380,14 +312,14 @@ section {
   }
 
   @include tablet {
-    .category-select-list {
+    .brand-expect-top {
       width: 100%;
 
       small {
         @include tablet-container();
       }
 
-      .current-large-category {
+      .brand-expect-notice {
         @include tablet-container();
 
         .large-category-list {
@@ -395,7 +327,7 @@ section {
         }
       }
 
-      .small-category-list {
+      .large-category-list {
         @include tablet-container();
       }
     }
@@ -410,7 +342,7 @@ section {
   }
 
   @include mobile {
-    .category-select-list {
+    .brand-expect-top {
       width: 100%;
       height: 140px;
       padding: 0;
@@ -419,7 +351,7 @@ section {
       background-color: #fff;
       z-index: 103;
 
-      .current-large-category {
+      .brand-expect-notice {
         @include mobile-container();
         position: relative;
         width: 100%;
@@ -459,7 +391,7 @@ section {
         }
       }
 
-      .small-category-list {
+      .large-category-list {
         @include mobile-container();
         margin: 20px 0;
       }

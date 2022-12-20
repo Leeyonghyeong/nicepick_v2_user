@@ -18,17 +18,18 @@
     <CommonBrandRecommendBrandItem background-color="#F8FAFD" />
 
     <article class="list">
-      <CommonBrandFilter :total-count="0" />
+      <CommonBrandFilter :total-count="totalCount" />
 
-      <div v-if="brandItems.length > 0" class="brand-items">
-        <CommonBrandStartCostItem
+      <CommonBrandItemListWrapper v-if="brandItems.length > 0">
+        <CommonBrandStartCostBrandItem
           v-for="item in brandItems"
           :key="item.id"
           :brand-item="item"
         />
-      </div>
+      </CommonBrandItemListWrapper>
       <div v-else class="empty">검색 결과가 존재하지 않습니다.</div>
     </article>
+    <div ref="infinity" class="observer"></div>
   </section>
 </template>
 
@@ -36,11 +37,84 @@
 import { storeToRefs } from 'pinia'
 import { useWindowStore } from '~~/store/window'
 import { Brand } from '~~/types/brand'
+import api from '~/config/axios.config'
+import { useCategoryStore } from '~~/store/category'
 
+const categoryStore = useCategoryStore()
 const windowStore = useWindowStore()
+const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
 
+if (category.value.length === 0) {
+  await categoryStore.addCategory()
+}
+
+const route = useRoute()
+
 const brandItems = ref<Brand[]>([])
+const nextPage = ref<boolean>(false)
+const page = ref<number>(1)
+const totalCount = ref<number>(0)
+const pageNum = computed<number>(() => {
+  return getDevice.value === 'pc' ? 12 : getDevice.value === 'tablet' ? 8 : 6
+})
+
+const getBrandItems = async () => {
+  page.value = 1
+  const { keyword } = route.query
+  const { data } = await api.get(
+    `/brand/search?keyword=${keyword}&sortType=p&page=${page.value}&pageNum=${pageNum.value}`
+  )
+
+  if (data.success) {
+    totalCount.value = data.page.totalCount
+    nextPage.value = data.page.next
+    brandItems.value = data.brand
+  }
+}
+
+const nextBrandItems = async () => {
+  page.value++
+  const { keyword } = route.query
+  const { data } = await api.get(
+    `/brand/search?keyword=${keyword}&sortType=p&page=${page.value}&pageNum=${pageNum.value}`
+  )
+
+  if (data.success) {
+    totalCount.value = data.page.totalCount
+    nextPage.value = data.page.next
+    brandItems.value.push(...data.brand)
+  }
+}
+
+watch(
+  () => route.query,
+  () => {
+    getBrandItems()
+  }
+)
+
+let io: IntersectionObserver
+const infinity = ref<HTMLDivElement | null>(null)
+
+onMounted(() => {
+  getBrandItems()
+
+  io = new IntersectionObserver(
+    () => {
+      nextBrandItems()
+    },
+    {
+      threshold: 0,
+    }
+  )
+
+  if (infinity.value) io.observe(infinity.value)
+})
+
+onUnmounted(() => {
+  io.disconnect()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -73,7 +147,10 @@ section {
 
   .list {
     @include pc-container();
-    margin-top: 50px;
+    padding: {
+      top: 50px;
+      bottom: 108px;
+    }
 
     .empty {
       display: flex;
@@ -97,6 +174,10 @@ section {
 
     .list {
       @include tablet-container();
+      padding: {
+        top: 50px;
+        bottom: 60px;
+      }
     }
   }
 
@@ -123,6 +204,10 @@ section {
 
     .list {
       @include mobile-container();
+
+      .empty {
+        font-size: 14px;
+      }
     }
   }
 }

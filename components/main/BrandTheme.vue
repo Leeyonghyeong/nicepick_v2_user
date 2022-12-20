@@ -33,11 +33,14 @@
         </div>
         <div class="page-button">
           <div class="show-all">
-            전체보기<img
-              v-if="getDevice === 'mobile'"
-              src="~/assets/img/arrow/more.png"
-              alt="more"
-            />
+            <NuxtLink :to="`/theme/${currentTheme}`">
+              전체보기
+              <img
+                v-if="getDevice === 'mobile'"
+                src="~/assets/img/arrow/more.png"
+                alt="more"
+              />
+            </NuxtLink>
           </div>
           <div v-if="getDevice !== 'mobile'" class="button">
             <img
@@ -56,11 +59,13 @@
       </div>
 
       <div class="theme-list">
-        <CommonBrandStartCostItem
-          v-for="item in themeBrandItems"
-          :key="item.id"
-          :brand-item="item"
-        />
+        <CommonBrandItemListWrapper>
+          <CommonBrandStartCostBrandItem
+            v-for="item in themeBrandItems"
+            :key="item.id"
+            :brand-item="item"
+          />
+        </CommonBrandItemListWrapper>
       </div>
       <div v-if="getDevice === 'mobile'" class="re-load">
         <CommonButtonNextPageLoad
@@ -184,12 +189,15 @@ section {
 
       .page-button {
         font-size: 12px;
-        color: $fontSubColor;
         display: flex;
         align-items: center;
 
         .show-all {
           cursor: pointer;
+
+          a {
+            color: $fontSubColor;
+          }
         }
 
         .button {
@@ -204,11 +212,7 @@ section {
     }
 
     .theme-list {
-      margin-top: 20px;
       margin-bottom: 80px;
-      display: grid;
-      gap: 30px 24px;
-      grid-template-columns: repeat(6, calc((100% - 120px) / 6));
     }
   }
 
@@ -258,11 +262,7 @@ section {
       }
 
       .theme-list {
-        margin-top: 20px;
         margin-bottom: 50px;
-        display: grid;
-        gap: 30px 24px;
-        grid-template-columns: repeat(4, calc((100% - 72px) / 4));
       }
     }
   }
@@ -311,23 +311,21 @@ section {
           right: 0;
 
           .show-all {
-            display: flex;
-            align-items: center;
+            a {
+              display: flex;
+              align-items: center;
 
-            img {
-              width: 20px;
-              height: 20px;
+              img {
+                width: 20px;
+                height: 20px;
+              }
             }
           }
         }
       }
 
       .theme-list {
-        margin-top: 20px;
         margin-bottom: 30px;
-        display: grid;
-        gap: 20px 8px;
-        grid-template-columns: repeat(3, calc((100% - 16px) / 3));
       }
     }
   }

@@ -5,11 +5,14 @@
         <div class="title">앞으로 기대되는 유망 브랜드</div>
         <div class="page">
           <div class="show-all">
-            전체보기<img
-              v-if="getDevice === 'mobile'"
-              src="~/assets/img/arrow/more.png"
-              alt="more"
-            />
+            <NuxtLink to="/brand/expect">
+              전체보기
+              <img
+                v-if="getDevice === 'mobile'"
+                src="~/assets/img/arrow/more.png"
+                alt="more"
+              />
+            </NuxtLink>
           </div>
           <div v-if="getDevice !== 'mobile'" class="page-button">
             <img
@@ -28,11 +31,13 @@
       </div>
     </article>
     <article class="list">
-      <CommonBrandStartCostItem
-        v-for="brandItem in brandItems"
-        :key="brandItem.id"
-        :brand-item="brandItem"
-      />
+      <CommonBrandItemListWrapper>
+        <CommonBrandStartCostBrandItem
+          v-for="brandItem in brandItems"
+          :key="brandItem.id"
+          :brand-item="brandItem"
+        />
+      </CommonBrandItemListWrapper>
     </article>
     <article v-if="getDevice === 'mobile'" class="re-load">
       <CommonButtonNextPageLoad
@@ -113,11 +118,8 @@ section {
     margin-top: 50px;
 
     &.list {
-      margin-top: 20px;
+      margin-top: 0px;
       margin-bottom: 80px;
-      display: grid;
-      gap: 30px 24px;
-      grid-template-columns: repeat(6, calc((100% - 120px) / 6));
     }
 
     .top {
@@ -135,10 +137,12 @@ section {
         display: flex;
         align-items: center;
         .show-all {
-          font-size: 12px;
-          font-weight: 400;
-          color: $fontSubColor;
-          cursor: pointer;
+          a {
+            font-size: 12px;
+            font-weight: 400;
+            color: $fontSubColor;
+            cursor: pointer;
+          }
         }
 
         .page-button {
@@ -158,8 +162,6 @@ section {
       @include tablet-container();
 
       &.list {
-        gap: 30px 24px;
-        grid-template-columns: repeat(4, calc((100% - 72px) / 4));
         margin-bottom: 50px;
       }
     }
@@ -170,8 +172,6 @@ section {
       @include mobile-container();
 
       &.list {
-        gap: 20px 8px;
-        grid-template-columns: repeat(3, calc((100% - 16px) / 3));
         margin-bottom: 30px;
       }
 
@@ -186,12 +186,14 @@ section {
         }
         .page {
           .show-all {
-            display: flex;
-            align-items: center;
+            a {
+              display: flex;
+              align-items: center;
 
-            img {
-              width: 20px;
-              height: 20px;
+              img {
+                width: 20px;
+                height: 20px;
+              }
             }
           }
         }

@@ -10,7 +10,7 @@
                 v-model="keyword"
                 type="text"
                 placeholder="검색어를 입력하세요"
-                @keypress.enter="router.push(`/search?keyword=${keyword}`)"
+                @keypress.enter="checkValidateInput"
               />
             </div>
             <div class="close">
@@ -45,7 +45,7 @@
 import { storeToRefs } from 'pinia'
 import { useKeywordRankStore } from '~~/store/keywordRank'
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'closeSearchModal'): void
 }>()
 
@@ -58,6 +58,15 @@ if (currentRank.value.length === 0) {
 
 const router = useRouter()
 const keyword = ref<string>('')
+
+const checkValidateInput = () => {
+  if (keyword.value) {
+    emit('closeSearchModal')
+    router.push(`/search?keyword=${keyword.value}`)
+  } else {
+    alert('검색어를 입력해 주세요')
+  }
+}
 
 onMounted(() => {
   document.body.setAttribute('style', 'overflow: hidden')

@@ -137,6 +137,7 @@ const loadCategoryImg = (
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: bold;
   }
 
   .brand-start-cost {
