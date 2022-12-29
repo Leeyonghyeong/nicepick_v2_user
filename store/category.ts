@@ -5,7 +5,7 @@ import api from '~/config/axios.config'
 export const useCategoryStore = defineStore('category', () => {
   const category = ref<LargeCategory[]>([])
 
-  const addCategory = async (): Promise<void> => {
+  const getCategory = async (): Promise<void> => {
     const { data } = await api.get('/category')
 
     if (data.success) {
@@ -13,5 +13,5 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
-  return { category, addCategory }
+  return { category, getCategory }
 })

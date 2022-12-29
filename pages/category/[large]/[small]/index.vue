@@ -1,6 +1,6 @@
 <template>
   <main>
-    <Search />
+    <Category />
   </main>
 </template>
 
@@ -8,11 +8,10 @@
 definePageMeta({
   layout: 'mobile',
 })
-
 const route = useRoute()
 
 useHead({
-  title: `창업할 땐 창업픽 - ${route.query.keyword}`,
+  title: `- ${route.params.large}(${route.params.small})`,
 })
 </script>
 

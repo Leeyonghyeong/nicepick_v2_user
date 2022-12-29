@@ -1,5 +1,8 @@
 <template>
-  <div class="brand-start-cost-item">
+  <div
+    class="brand-start-cost-item"
+    @click="$router.push(`/brand/detail/${brandItem.id}`)"
+  >
     <div class="brand-image">
       <img
         v-if="brandItem.brandImg"
@@ -10,6 +13,7 @@
         v-else
         :src="
           loadCategoryImg(
+            category,
             brandItem.largeCategoryName,
             brandItem.smallCategoryName
           )
@@ -39,7 +43,7 @@
     <div class="brand-name">{{ brandItem.brandName }}</div>
     <div class="brand-start-cost">
       <div>
-        창업비 {{ calcStartCost(brandItem.brandStartCost.startTotalPrice) }}
+        창업비 {{ calcPrice(brandItem.brandStartCost.startTotalPrice) }}
       </div>
       <div>{{ brandItem.brandStartCost.standardArea }}㎡</div>
     </div>
@@ -50,7 +54,7 @@
 import { storeToRefs } from 'pinia'
 import { CategoryColor } from '~~/types/category'
 import { Brand } from '~~/types/brand'
-import { calcStartCost } from '~/function/common'
+import { calcPrice, loadCategoryImg } from '~/function/common'
 import { useCategoryStore } from '~~/store/category'
 
 defineProps<{
@@ -59,29 +63,6 @@ defineProps<{
 
 const categoryStore = useCategoryStore()
 const { category } = storeToRefs(categoryStore)
-
-const loadCategoryImg = (
-  largeCategoryName: string,
-  smallCategoryName: string
-): string => {
-  const largeCategory = category.value.find(
-    (category) => category.categoryName === largeCategoryName
-  )
-
-  let url = ''
-
-  if (largeCategory) {
-    const smallCategory = largeCategory.smallCategory.find(
-      (category) => category.categoryName === smallCategoryName
-    )
-
-    if (smallCategory) {
-      url = smallCategory.categoryImg
-    }
-  }
-
-  return url
-}
 </script>
 
 <style lang="scss" scoped>
@@ -92,7 +73,7 @@ const loadCategoryImg = (
     width: 100%;
     aspect-ratio: 1;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
     position: relative;
     overflow: hidden;
     background-color: #fafafa;
@@ -114,6 +95,7 @@ const loadCategoryImg = (
     img {
       width: 100%;
       height: 100%;
+      display: block;
 
       &.default-image {
         width: 50%;
@@ -131,17 +113,17 @@ const loadCategoryImg = (
   }
 
   .brand-name {
-    font-size: 14px;
+    font-size: 16px;
     margin-bottom: 5px;
     color: $fontMainColor;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-weight: bold;
+    font-weight: 600;
   }
 
   .brand-start-cost {
-    font-size: 12px;
+    font-size: 13px;
     color: $fontSubColor;
     display: flex;
     align-items: center;
@@ -158,6 +140,9 @@ const loadCategoryImg = (
   }
 
   @include mobile {
+    .brand-image {
+      margin-bottom: 10px;
+    }
     .brand-name {
       font-size: 13px;
     }

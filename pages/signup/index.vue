@@ -10,7 +10,7 @@ definePageMeta({
 })
 
 useHead({
-  title: '창업할 땐 창업픽 - 회원가입',
+  title: '- 회원가입',
 })
 </script>
 

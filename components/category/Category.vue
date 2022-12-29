@@ -10,7 +10,7 @@
           class="back"
           @click="router.push('/')"
         />
-        <div>{{ route.query.l }}</div>
+        <div>{{ route.params.large }}</div>
         <div>
           <img
             src="~/assets/img/arrow/list_button_down.png"
@@ -21,8 +21,8 @@
         <div v-if="isShowLargeCategoryList" class="large-category-list">
           <div v-for="item in category" :key="item.id" class="large-item">
             <NuxtLink
-              :to="`/category?l=${item.categoryName}`"
-              :class="{ active: item.categoryName === route.query.l }"
+              :to="`/category/${item.categoryName.replaceAll('/', '%2F')}`"
+              :class="{ active: item.categoryName === route.params.large }"
             >
               {{ item.categoryName }}
             </NuxtLink>
@@ -30,9 +30,12 @@
         </div>
       </div>
       <div ref="smallCategoryList" class="small-category-list">
-        <div class="small-item" :class="{ active: !route.query.s }">
+        <div class="small-item" :class="{ active: !route.params.small }">
           <NuxtLink
-            :to="`/category?l=${currentLargeCategory?.categoryName}`"
+            :to="`/category/${currentLargeCategory?.categoryName.replaceAll(
+              '/',
+              '%2F'
+            )}`"
             style="height: 20px"
             >전체
           </NuxtLink>
@@ -41,10 +44,13 @@
           v-for="item in currentLargeCategory?.smallCategory"
           :key="item.id"
           class="small-item"
-          :class="{ active: route.query.s === item.categoryName }"
+          :class="{ active: route.params.small === item.categoryName }"
         >
           <NuxtLink
-            :to="`/category?l=${currentLargeCategory?.categoryName}&s=${item.categoryName}`"
+            :to="`/category/${currentLargeCategory?.categoryName.replaceAll(
+              '/',
+              '%2F'
+            )}/${item.categoryName.replaceAll('/', '%2F')}`"
           >
             <img
               v-if="route.query.s !== item.categoryName"
@@ -123,7 +129,7 @@ const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
 
 if (category.value.length === 0) {
-  await categoryStore.addCategory()
+  await categoryStore.getCategory()
 }
 
 const route = useRoute()
@@ -140,12 +146,12 @@ const nextPage = ref<boolean>(false)
 const page = ref<number>(1)
 const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
-  return getDevice.value === 'pc' ? 12 : getDevice.value === 'tablet' ? 8 : 6
+  return getDevice.value === 'pc' ? 10 : getDevice.value === 'tablet' ? 8 : 6
 })
 
 const initCurrentLargeCategory = () => {
   currentLargeCategory.value = category.value.find(
-    (item) => item.categoryName === route.query.l
+    (item) => item.categoryName === route.params.large
   )
 }
 
@@ -163,10 +169,10 @@ const scrollButtonHandler = (type: string) => {
 
 const getBrandItems = async () => {
   page.value = 1
-  const { l, s } = route.query
+  const { large, small } = route.params
   const { data } = await api.get(
-    `/brand/search/category?l=${l}&s=${s}&sortType=p&type=${
-      s ? 's' : 'l'
+    `/brand/search/category?l=${large}&s=${small}&sortType=p&type=${
+      small ? 's' : 'l'
     }&page=${page.value}&pageNum=${pageNum.value}`
   )
 
@@ -179,10 +185,10 @@ const getBrandItems = async () => {
 
 const nextBrandItems = async () => {
   page.value++
-  const { l, s } = route.query
+  const { large, small } = route.params
   const { data } = await api.get(
-    `/brand/search/category?l=${l}&s=${s}&sortType=p&type=${
-      s ? 's' : 'l'
+    `/brand/search/category?l=${large}&s=${small}&sortType=p&type=${
+      small ? 's' : 'l'
     }&page=${page.value}&pageNum=${pageNum.value}`
   )
 
@@ -205,15 +211,6 @@ const isShowLargeCategoryHandler = () => {
     isShowLargeCategoryList.value = true
   }
 }
-
-watch(
-  () => route.query,
-  () => {
-    isShowLargeCategoryList.value = false
-    initCurrentLargeCategory()
-    getBrandItems()
-  }
-)
 
 let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)

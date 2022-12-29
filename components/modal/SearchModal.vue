@@ -62,7 +62,7 @@ const keyword = ref<string>('')
 const checkValidateInput = () => {
   if (keyword.value) {
     emit('closeSearchModal')
-    router.push(`/search?keyword=${keyword.value}`)
+    router.push(`/search/${keyword.value.replaceAll('/', '%2F')}`)
   } else {
     alert('검색어를 입력해 주세요')
   }

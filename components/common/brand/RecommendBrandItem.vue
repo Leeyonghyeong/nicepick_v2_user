@@ -3,7 +3,12 @@
     <div class="recommend-brand">
       <h1>추천 브랜드<span>AD</span></h1>
       <div class="recommend-brand-items">
-        <div v-for="item in brand" :key="item.id" class="item">
+        <div
+          v-for="item in brand"
+          :key="item.id"
+          class="item"
+          @click="$router.push(`/brand/detail/${item.id}`)"
+        >
           <div class="logo">
             <img :src="item.brandLogoImg" :alt="item.brandName" />
           </div>

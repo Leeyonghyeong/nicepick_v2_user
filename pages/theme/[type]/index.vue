@@ -12,7 +12,7 @@ definePageMeta({
 const route = useRoute()
 
 useHead({
-  title: `창업할 땐 창업픽 - 테마(${route.params.type})`,
+  title: `- 테마(${route.params.type})`,
 })
 </script>
 

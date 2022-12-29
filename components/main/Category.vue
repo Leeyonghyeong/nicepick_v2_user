@@ -24,13 +24,13 @@ const categoryStore = useCategoryStore()
 const { category } = storeToRefs(categoryStore)
 
 if (category.value.length === 0) {
-  categoryStore.addCategory()
+  categoryStore.getCategory()
 }
 
 const router = useRouter()
 
 const moveCategoryPage = (l: string) => {
-  router.push(`/category?l=${l}`)
+  router.push(`/category/${l.replaceAll('/', '%2F')}`)
 }
 </script>
 

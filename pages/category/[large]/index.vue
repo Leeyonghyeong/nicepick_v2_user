@@ -11,7 +11,7 @@ definePageMeta({
 const route = useRoute()
 
 useHead({
-  title: `창업할 땐 창업픽 - ${route.query.s ? route.query.s : route.query.l}`,
+  title: `- ${route.params.large}`,
 })
 </script>
 

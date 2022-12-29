@@ -53,13 +53,14 @@
     <article class="list">
       <CommonBrandFilter :total-count="totalCount" />
 
-      <CommonBrandItemListWrapper>
+      <CommonBrandItemListWrapper v-if="brandItems.length > 0">
         <CommonBrandStartCostBrandItem
           v-for="item in brandItems"
           :key="item.id"
           :brand-item="item"
         />
       </CommonBrandItemListWrapper>
+      <div v-else class="empty">검색 결과가 존재하지 않습니다.</div>
     </article>
     <div ref="infinity" class="observer"></div>
   </section>
@@ -78,7 +79,7 @@ const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
 
 if (category.value.length === 0) {
-  await categoryStore.addCategory()
+  await categoryStore.getCategory()
 }
 
 const route = useRoute()
@@ -92,7 +93,7 @@ const nextPage = ref<boolean>(false)
 const page = ref<number>(1)
 const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
-  return getDevice.value === 'pc' ? 12 : getDevice.value === 'tablet' ? 8 : 6
+  return getDevice.value === 'pc' ? 10 : getDevice.value === 'tablet' ? 8 : 6
 })
 
 const scrollButtonHandler = (type: string) => {
@@ -309,6 +310,16 @@ section {
       top: 50px;
       bottom: 108px;
     }
+
+    .empty {
+      display: flex;
+      justify-content: center;
+      color: $fontSubColor;
+      padding: {
+        top: 120px;
+        bottom: 300px;
+      }
+    }
   }
 
   @include tablet {
@@ -337,6 +348,10 @@ section {
       padding: {
         top: 50px;
         bottom: 60px;
+      }
+
+      .empty {
+        font-size: 14px;
       }
     }
   }

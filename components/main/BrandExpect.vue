@@ -66,7 +66,7 @@ const prevPage = ref<boolean>(false)
 const page = ref<number>(1)
 const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
-  return getDevice.value === 'pc' ? 12 : getDevice.value === 'tablet' ? 8 : 6
+  return getDevice.value === 'pc' ? 10 : getDevice.value === 'tablet' ? 8 : 6
 })
 
 const getBrnadItems = async () => {

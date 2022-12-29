@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: 'utf-8',
-      title: '창업할 땐 창업픽',
+      titleTemplate: '창업할 땐 창업픽 %s',
       meta: [
         {
           name: 'keywords',
@@ -68,4 +68,7 @@ export default defineNuxtConfig({
     },
   },
   modules: ['@pinia/nuxt'],
+  build: {
+    transpile: [/echarts/],
+  },
 })

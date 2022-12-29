@@ -84,7 +84,7 @@ const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
 
 if (category.value.length === 0) {
-  await categoryStore.addCategory()
+  await categoryStore.getCategory()
 }
 
 const route = useRoute()
@@ -95,7 +95,7 @@ const nextPage = ref<boolean>(false)
 const page = ref<number>(1)
 const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
-  return getDevice.value === 'pc' ? 12 : getDevice.value === 'tablet' ? 8 : 6
+  return getDevice.value === 'pc' ? 10 : getDevice.value === 'tablet' ? 8 : 6
 })
 
 const getBrandItems = async () => {
@@ -129,13 +129,6 @@ const nextBrandItems = async () => {
 const changeTheme = (type: string) => {
   router.push(`/theme/${type}`)
 }
-
-watch(
-  () => route.params,
-  () => {
-    getBrandItems()
-  }
-)
 
 let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)

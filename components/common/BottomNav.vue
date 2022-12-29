@@ -11,6 +11,12 @@
           alt="검색"
         />
         <img
+          v-else-if="$route.path.includes('/search/')"
+          src="~/assets/img/nav/search_active.png"
+          alt="검색"
+          @click="isShowSearchModal = true"
+        />
+        <img
           v-else
           src="~/assets/img/nav/search.png"
           alt="검색"

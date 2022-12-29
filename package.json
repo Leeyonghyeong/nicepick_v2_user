@@ -3,7 +3,7 @@
   "description": "Node Version 16.18.1 Nicepick User Responsive Web",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev -p 3002",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
@@ -24,6 +24,8 @@
   "dependencies": {
     "@pinia/nuxt": "^0.4.6",
     "axios": "^1.2.0",
-    "swiper": "^8.4.5"
+    "echarts": "^5.4.1",
+    "swiper": "^8.4.5",
+    "vue-echarts": "^6.3.3"
   }
 }
