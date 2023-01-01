@@ -11,67 +11,128 @@
         <div class="info-content">
           <div class="item">
             <div>상호</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.companyName }}</div>
+            <div>{{ brandCompanyItem.companyName }}</div>
           </div>
           <div class="item">
             <div>대표자</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.ownerName }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.ownerName
+                  : ''
+              }}
+            </div>
           </div>
         </div>
 
         <div class="info-content">
           <div class="item">
             <div>대표번호</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.repTel }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.repTel
+                  : ''
+              }}
+            </div>
           </div>
           <div class="item">
             <div>대표FAX</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.repFaxTel }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.repFaxTel
+                  : ''
+              }}
+            </div>
           </div>
         </div>
 
         <div class="info-content">
           <div class="item">
             <div>법인설립 등기일</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.corpRegDate }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.corpRegDate
+                  : ''
+              }}
+            </div>
           </div>
           <div class="item">
             <div>법인등록번호</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.corpNumber }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.corpNumber
+                  : ''
+              }}
+            </div>
           </div>
         </div>
 
         <div class="info-content">
           <div class="item">
             <div>사업자 등록일</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.bizRegDate }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.bizRegDate
+                  : ''
+              }}
+            </div>
           </div>
           <div class="item">
             <div>사업자등록번호</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.bizNumber }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.bizNumber
+                  : ''
+              }}
+            </div>
           </div>
         </div>
 
         <div class="info-content">
           <div class="item">
             <div>정보공개서 최초등록일</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.companyName }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.regDate
+                  : ''
+              }}
+            </div>
           </div>
           <div class="item">
             <div>정보공개서 최종등록일</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.lastUpdateDate }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.lastUpdateDate
+                  : ''
+              }}
+            </div>
           </div>
         </div>
 
         <div class="info-content">
           <div class="item">
             <div>정보공개서 등록번호</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.regNumber }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.regNumber
+                  : ''
+              }}
+            </div>
           </div>
           <div class="item">
             <div>홈페이지</div>
             <div>
               <a
+                v-if="brandCompanyItem.webUrl"
                 :href="brandCompanyItem.webUrl"
                 :target="getDevice === 'pc' ? '_blank' : ''"
                 >홈페이지 ></a
@@ -83,7 +144,13 @@
         <div class="info-content">
           <div class="item addr">
             <div>주소</div>
-            <div>{{ brandCompanyItem.brandNormalStatus.address }}</div>
+            <div>
+              {{
+                brandCompanyItem.brandNormalStatus
+                  ? brandCompanyItem.brandNormalStatus.address
+                  : ''
+              }}
+            </div>
           </div>
         </div>
       </div>
@@ -125,17 +192,17 @@
           :height="300"
         />
         <CompanyTakeStatus
-          v-if="isGraphActive[1]"
+          v-else-if="isGraphActive[1]"
           :brand-finance-status="brandCompanyItem.brandFinanceStatus"
           :height="300"
         />
         <CompanyOperatingStatus
-          v-if="isGraphActive[2]"
+          v-else-if="isGraphActive[2]"
           :brand-finance-status="brandCompanyItem.brandFinanceStatus"
           :height="300"
         />
         <CompanyIncomeStatus
-          v-if="isGraphActive[3]"
+          v-else-if="isGraphActive[3]"
           :brand-finance-status="brandCompanyItem.brandFinanceStatus"
           :height="300"
         />
@@ -149,14 +216,26 @@
           <img src="~/assets/img/common/employee.png" alt="임직원 수" />
           <div>
             임원
-            <span>{{ brandCompanyItem.brandEmployee[0].excutives }}명</span>
+            <span
+              >{{
+                brandCompanyItem.brandEmployee[0]
+                  ? brandCompanyItem.brandEmployee[0].excutives
+                  : 0
+              }}명</span
+            >
           </div>
         </div>
         <div class="employee-wrapper">
           <img src="~/assets/img/common/employee.png" alt="임직원 수" />
           <div>
             직원
-            <span>{{ brandCompanyItem.brandEmployee[0].employees }}명</span>
+            <span
+              >{{
+                brandCompanyItem.brandEmployee[0]
+                  ? brandCompanyItem.brandEmployee[0].employees
+                  : 0
+              }}명</span
+            >
           </div>
         </div>
       </div>
@@ -164,9 +243,7 @@
 
     <div v-if="brandSameListItems.length > 0" class="info-box">
       <div class="title">
-        <span style="color: #1569ff">{{
-          brandCompanyItem.brandNormalStatus.companyName
-        }}</span
+        <span style="color: #1569ff">{{ brandCompanyItem.companyName }}</span
         >의 다른 브랜드
       </div>
 
@@ -330,7 +407,6 @@ const isGraphActive = ref<boolean[]>([true, false, false, false])
 
     .graph-box {
       height: 300px;
-      padding: 20px 0 0;
       border: 1px solid $sectionLine;
       border-radius: 10px;
     }
@@ -445,6 +521,45 @@ const isGraphActive = ref<boolean[]>([true, false, false, false])
 
       .title {
         font-size: 16px;
+      }
+
+      .info-wrapper {
+        .info-content {
+          flex-direction: column;
+          border-bottom: none;
+
+          .item {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid $sectionLine;
+
+            &.addr {
+              border-bottom: none;
+            }
+
+            div {
+              padding: 0;
+              word-break: keep-all;
+              line-height: 16px;
+              font-size: 13px;
+              padding: 16px;
+
+              &:first-child {
+                text-align: center;
+                justify-content: center;
+                width: 112px;
+                min-width: 112px;
+              }
+            }
+          }
+        }
+      }
+
+      .graph-tab {
+        div {
+          font-size: 13px;
+          padding: 10px;
+        }
       }
 
       .brand-list {

@@ -1,6 +1,16 @@
 <template>
-  <section>
-    <article ref="chartElement" :style="{ height: `${height}px` }"></article>
+  <section style="height: 100%">
+    <article
+      v-if="
+        brandAreaSaleStatus.length > 0 &&
+        brandAreaSaleStatus.filter((e) =>
+          parseInt(e.salesAve.replace(/,/g, ''))
+        ).length > 0
+      "
+      ref="chartElement"
+      :style="{ height: `${height}px`, paddingTop: '20px' }"
+    ></article>
+    <EmptyChart v-else />
   </section>
 </template>
 
@@ -16,6 +26,8 @@ import {
 } from 'echarts/components'
 import { BarChart, BarSeriesOption } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
+import { Arrayable } from '@unhead/vue'
+import EmptyChart from './EmptyChart.vue'
 import { BrandAreaSalesAve } from '~~/types/brand'
 import { calcPrice } from '~/function/common'
 
@@ -64,7 +76,10 @@ onMounted(() => {
     const maxYear = year.length > 0 ? Math.max(...year) : 0
 
     const filterItem = _brandAreaSalesStatueItem.filter(
-      (e) => e.year === maxYear && e.location !== '전체'
+      (e) =>
+        e.year === maxYear &&
+        e.location !== '전체' &&
+        parseInt(e.salesAve.replace(/,/g, '')) > 0
     )
 
     const allLocationItem = _brandAreaSalesStatueItem.filter(
@@ -77,61 +92,76 @@ onMounted(() => {
     mergeItem.push(...filterItem)
 
     filterItem.sort((a, b) =>
-      parseInt(a.areaSalesAve.replace(/,/g, '')) >
-      parseInt(b.areaSalesAve.replace(/,/g, ''))
+      parseInt(a.salesAve.replace(/,/g, '')) >
+      parseInt(b.salesAve.replace(/,/g, ''))
         ? -1
         : 0
     )
 
     const maxSalseLocation: BrandAreaSalesAve = filterItem[0]
 
+    const legendData: string[] = maxSalseLocation
+      ? ['전체 평균 매출', `평균 매출 최대 지역: ${maxSalseLocation.location}`]
+      : ['전체 평균 매출']
+
+    const data: Arrayable<BarSeriesOption> = mergeItem.map((e) => {
+      return {
+        name:
+          e.location === '전체'
+            ? '전체 평균 매출'
+            : e.location === maxSalseLocation.location
+            ? `평균 매출 최대 지역: ${maxSalseLocation.location}`
+            : e.location,
+        type: 'bar',
+        barGap: 0.5,
+        barMaxWidth: 20,
+        itemStyle: {
+          borderRadius: [50, 50, 0, 0],
+        },
+        color:
+          e.location === '전체'
+            ? '#A489F0'
+            : e.location === maxSalseLocation.location
+            ? '#75D6FF'
+            : '#BCBCBC',
+        emphasis: {
+          focus: 'series',
+        },
+        tooltip: {
+          valueFormatter: (value) => {
+            if (typeof value === 'number' && !isNaN(value)) {
+              return value < 0
+                ? '-' + calcPrice(Math.abs(value).toLocaleString())
+                : calcPrice(Math.abs(value).toLocaleString())
+            } else {
+              return '0'
+            }
+          },
+        },
+        data: [parseInt(e.salesAve.replace(/,/g, ''))],
+      }
+    })
+
     const option: EChartsOption = {
       tooltip: {
-        trigger: 'axis',
+        trigger: 'item',
       },
       legend: {
-        data: [
-          '전체 평균 매출',
-          `평균 매출 최대 지역: ${maxSalseLocation.location}`,
-        ],
+        data: legendData,
         icon: 'circle',
         show: true,
       },
       xAxis: {
         type: 'category',
         axisTick: { show: true },
-        data: [...mergeItem.map((e) => e.location)],
+        data: [maxYear],
       },
-      yAxis: [
-        {
-          type: 'value',
-        },
-      ],
+      yAxis: {
+        type: 'value',
+      },
       // Declare several bar series, each will be mapped
       // to a column of dataset.source by default.
-      series: [
-        {
-          name: '평균 매출',
-          type: 'bar',
-          barWidth: '10%',
-          color: '#FF9264',
-          emphasis: {
-            focus: 'series',
-          },
-          tooltip: {
-            valueFormatter: (value) => {
-              if (typeof value === 'number' && !isNaN(value)) {
-                return value < 0
-                  ? '-' + calcPrice(Math.abs(value).toLocaleString())
-                  : calcPrice(Math.abs(value).toLocaleString())
-              } else {
-                return '0'
-              }
-            },
-          },
-          data: [...mergeItem.map((e) => e.areaSalesAve)],
-        },
-      ],
+      series: [...data],
     }
 
     option && myChart.setOption(option)

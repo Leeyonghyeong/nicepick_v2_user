@@ -1,6 +1,11 @@
 <template>
-  <section>
-    <article ref="chartElement" :style="{ height: `${height}px` }"></article>
+  <section style="height: 100%">
+    <article
+      v-if="brandChangeStatus.length > 0"
+      ref="chartElement"
+      :style="{ height: `${height}px`, paddingTop: '20px' }"
+    ></article>
+    <EmptyChart v-else />
   </section>
 </template>
 
@@ -16,6 +21,7 @@ import {
 } from 'echarts/components'
 import { BarChart, BarSeriesOption } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
+import EmptyChart from './EmptyChart.vue'
 import { BrandChangeStatus } from '~~/types/brand'
 
 const props = defineProps<{
@@ -112,8 +118,10 @@ onMounted(() => {
         {
           name: '신규개점',
           type: 'bar',
-          barGap: 0.5,
-          barWidth: 20,
+          barMaxWidth: 20,
+          itemStyle: {
+            borderRadius: [50, 50, 0, 0],
+          },
           color: '#74A3FF',
           emphasis: {
             focus: 'series',
@@ -126,8 +134,10 @@ onMounted(() => {
         {
           name: '계약종료',
           type: 'bar',
-          barGap: 0.5,
-          barWidth: 20,
+          barMaxWidth: 20,
+          itemStyle: {
+            borderRadius: [50, 50, 0, 0],
+          },
           color: '#7DE39A',
           emphasis: {
             focus: 'series',
@@ -140,8 +150,10 @@ onMounted(() => {
         {
           name: '계약해지',
           type: 'bar',
-          barGap: 0.5,
-          barWidth: 20,
+          barMaxWidth: 20,
+          itemStyle: {
+            borderRadius: [50, 50, 0, 0],
+          },
           color: '#FFE071',
           emphasis: {
             focus: 'series',
@@ -154,8 +166,10 @@ onMounted(() => {
         {
           name: '명의변경',
           type: 'bar',
-          barGap: 0.5,
-          barWidth: 20,
+          barMaxWidth: 20,
+          itemStyle: {
+            borderRadius: [50, 50, 0, 0],
+          },
           color: '#FFA2A2',
           emphasis: {
             focus: 'series',

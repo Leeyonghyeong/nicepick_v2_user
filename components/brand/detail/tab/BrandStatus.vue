@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <!-- <div class="sales-graph status-box">
+    <div class="sales-graph status-box">
       <div class="title">지역별 평균 매출</div>
       <div class="graph-box">
         <BrandAreaSalesStatus
@@ -39,7 +39,7 @@
           :height="300"
         />
       </div>
-    </div> -->
+    </div>
 
     <div class="start-cost status-box">
       <div class="title">창업 비용</div>
@@ -47,36 +47,72 @@
         <div class="start-cost-items">
           <div class="start-cost-item">
             <div>기준 면적</div>
-            <div>{{ brandStatusItem.brandStartCost.standardArea }}㎡</div>
+            <div>
+              {{
+                brandStatusItem.brandStartCost
+                  ? brandStatusItem.brandStartCost.standardArea
+                  : 0
+              }}㎡
+            </div>
           </div>
           <div class="start-cost-item">
             <div>가맹비</div>
             <div>
-              {{ calcPrice(brandStatusItem.brandStartCost.membershipFee) }}
+              {{
+                calcPrice(
+                  brandStatusItem.brandStartCost
+                    ? brandStatusItem.brandStartCost.membershipFee
+                    : '0'
+                )
+              }}
             </div>
           </div>
           <div class="start-cost-item">
             <div>교육비</div>
             <div>
-              {{ calcPrice(brandStatusItem.brandStartCost.educationFee) }}
+              {{
+                calcPrice(
+                  brandStatusItem.brandStartCost
+                    ? brandStatusItem.brandStartCost.educationFee
+                    : '0'
+                )
+              }}
             </div>
           </div>
           <div class="start-cost-item">
             <div>보증금</div>
             <div>
-              {{ calcPrice(brandStatusItem.brandStartCost.deposit) }}
+              {{
+                calcPrice(
+                  brandStatusItem.brandStartCost
+                    ? brandStatusItem.brandStartCost.deposit
+                    : '0'
+                )
+              }}
             </div>
           </div>
           <div class="start-cost-item">
             <div>인테리어</div>
             <div>
-              {{ calcPrice(brandStatusItem.brandStartCost.interiorFee) }}
+              {{
+                calcPrice(
+                  brandStatusItem.brandStartCost
+                    ? brandStatusItem.brandStartCost.interiorFee
+                    : '0'
+                )
+              }}
             </div>
           </div>
           <div class="start-cost-item">
             <div>기타비용</div>
             <div>
-              {{ calcPrice(brandStatusItem.brandStartCost.etcFee) }}
+              {{
+                calcPrice(
+                  brandStatusItem.brandStartCost
+                    ? brandStatusItem.brandStartCost.etcFee
+                    : '0'
+                )
+              }}
             </div>
           </div>
         </div>
@@ -86,7 +122,13 @@
         <div class="total-price">
           <div>총 합계</div>
           <div>
-            {{ calcPrice(brandStatusItem.brandStartCost.startTotalPrice) }}
+            {{
+              calcPrice(
+                brandStatusItem.brandStartCost
+                  ? brandStatusItem.brandStartCost.startTotalPrice
+                  : '0'
+              )
+            }}
           </div>
         </div>
       </div>
@@ -130,7 +172,6 @@ section {
     }
 
     .graph-box {
-      padding: 20px 0 0;
       border: 1px solid $sectionLine;
       border-radius: 10px;
       height: 300px;

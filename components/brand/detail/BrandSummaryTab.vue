@@ -33,7 +33,9 @@
           >
             {{ brandStatusItem.smallCategoryName }}
           </div>
-          <div class="brand-name">{{ brandStatusItem.brandName }}</div>
+          <div class="brand-name">
+            {{ brandStatusItem.brandName }}
+          </div>
         </div>
       </div>
 
@@ -41,10 +43,20 @@
         <div class="item">
           <div class="info-title">창업비용</div>
           <div class="info-value price">
-            {{ calcPrice(brandStatusItem.brandStartCost.startTotalPrice) }}
+            {{
+              calcPrice(
+                brandStatusItem.brandStartCost
+                  ? brandStatusItem.brandStartCost.startTotalPrice
+                  : '0'
+              )
+            }}
           </div>
           <div class="standard-area">
-            {{ brandStatusItem.brandStartCost.standardArea }}㎡
+            {{
+              brandStatusItem.brandStartCost
+                ? brandStatusItem.brandStartCost.standardArea
+                : 0
+            }}㎡
           </div>
         </div>
         <div class="item">

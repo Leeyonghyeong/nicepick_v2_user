@@ -14,7 +14,10 @@
           <div class="right-youtube-title">
             {{ currentYoutube?.brandYoutube[0].youtubeTitle }}
           </div>
-          <div class="right-brand-logo-name">
+          <div
+            class="right-brand-logo-name"
+            @click="$router.push(`/brand/detail/${currentYoutube?.id}`)"
+          >
             <img
               :src="currentYoutube?.brandLogoImg"
               :alt="currentYoutube?.brandName"
@@ -59,7 +62,12 @@
                       : ''
                   }}
                 </div>
-                <div class="brand-name">{{ item.brandName }}</div>
+                <div
+                  class="brand-name"
+                  @click="$router.push(`/brand/detail/${item.id}`)"
+                >
+                  {{ item.brandName }}
+                </div>
               </div>
             </div>
           </div>
@@ -181,6 +189,7 @@ section {
           align-items: center;
           font-size: 14px;
           color: $fontSubColor;
+          cursor: pointer;
 
           img {
             width: 72px;

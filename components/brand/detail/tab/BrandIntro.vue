@@ -91,11 +91,14 @@
             <img
               :src="item.menuImgUrl"
               :alt="item.menuName ? item.menuName : brandIntroItem.brandName"
+              @click="showImageModalHandler(item.menuImgUrl)"
             />
           </div>
           <div v-if="item.menuName || item.menuPrice" class="menu-info">
-            <div v-if="item.menuName">{{ item.menuName }}</div>
-            <div v-if="item.menuPrice">
+            <div v-if="item.menuName" class="menu-name">
+              {{ item.menuName }}
+            </div>
+            <div v-if="item.menuPrice" class="menu-price">
               {{ item.menuPrice.toLocaleString() }}원
             </div>
           </div>
@@ -147,6 +150,13 @@
     </div>
     <!-- 창업 비용 및 절차 -->
   </section>
+
+  <ModalImageModal
+    v-if="isShowImageModal"
+    :url="brandMenuImg.map((e) => e.menuImgUrl)"
+    :current-url="currentMenuImg"
+    @close-image-modal-handler="closeImageModalHandler"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -210,6 +220,8 @@ const changeCurrentYoutube = (item: BrandYoutube) => {
 // 대표메뉴
 const brandMenuImg = ref<BrandMenuImg[]>(prop.brandIntroItem.brandMenuImg)
 const brandMenuList = ref<HTMLDivElement | null>(null)
+const currentMenuImg = ref<string>('')
+const isShowImageModal = ref<boolean>(false)
 const itemMargin = computed<number>(() => {
   return prop.getDevice === 'pc' ? 30 : 24
 })
@@ -226,6 +238,15 @@ const brandMenuListPageHandler = (type: string) => {
         item.getBoundingClientRect().width + itemMargin.value
     }
   }
+}
+
+const showImageModalHandler = (url: string) => {
+  currentMenuImg.value = url
+  isShowImageModal.value = true
+}
+
+const closeImageModalHandler = () => {
+  isShowImageModal.value = false
 }
 // 대표메뉴
 
@@ -373,6 +394,7 @@ section {
         white-space: nowrap;
 
         .item {
+          vertical-align: top;
           margin-left: 30px;
           display: inline-block;
 
@@ -401,7 +423,7 @@ section {
               line-height: 17px;
               text-align: center;
 
-              &:last-child {
+              &.menu-price {
                 margin-top: 7px;
                 color: $fontSubColor;
               }

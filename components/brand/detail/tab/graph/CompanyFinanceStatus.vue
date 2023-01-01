@@ -1,6 +1,11 @@
 <template>
-  <section>
-    <article ref="chartElement" :style="{ height: `${height}px` }"></article>
+  <section style="height: 100%">
+    <article
+      v-if="brandFinanceStatus.length > 0"
+      ref="chartElement"
+      :style="{ height: `${height}px`, paddingTop: '20px' }"
+    ></article>
+    <EmptyChart v-else />
   </section>
 </template>
 
@@ -16,6 +21,7 @@ import {
 } from 'echarts/components'
 import { BarChart, BarSeriesOption } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
+import EmptyChart from './EmptyChart.vue'
 import { BrandFinanceStatus } from '~~/types/brand'
 import { calcPrice } from '~/function/common'
 
@@ -109,7 +115,7 @@ onMounted(() => {
           name: '자산',
           type: 'bar',
           barGap: 0.5,
-          barWidth: 20,
+          barMaxWidth: 20,
           color: '#15AF79',
           emphasis: {
             focus: 'series',
@@ -125,13 +131,22 @@ onMounted(() => {
               }
             },
           },
-          data: [..._asset],
+          data: [
+            ..._asset.map((e) => {
+              return {
+                value: e,
+                itemStyle: {
+                  borderRadius: e > 0 ? [50, 50, 0, 0] : [0, 0, 50, 50],
+                },
+              }
+            }),
+          ],
         },
         {
           name: '자본',
           type: 'bar',
           barGap: 0.5,
-          barWidth: 20,
+          barMaxWidth: 20,
           color: '#5C64B7',
           emphasis: {
             focus: 'series',
@@ -147,13 +162,22 @@ onMounted(() => {
               }
             },
           },
-          data: [..._equity],
+          data: [
+            ..._equity.map((e) => {
+              return {
+                value: e,
+                itemStyle: {
+                  borderRadius: e > 0 ? [50, 50, 0, 0] : [0, 0, 50, 50],
+                },
+              }
+            }),
+          ],
         },
         {
           name: '부채',
           type: 'bar',
           barGap: 0.5,
-          barWidth: 20,
+          barMaxWidth: 20,
           color: '#bcbcbc',
           emphasis: {
             focus: 'series',
@@ -169,7 +193,16 @@ onMounted(() => {
               }
             },
           },
-          data: [..._liability],
+          data: [
+            ..._liability.map((e) => {
+              return {
+                value: e,
+                itemStyle: {
+                  borderRadius: e > 0 ? [50, 50, 0, 0] : [0, 0, 50, 50],
+                },
+              }
+            }),
+          ],
         },
       ],
     }

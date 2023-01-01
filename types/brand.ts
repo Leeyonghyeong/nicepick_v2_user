@@ -3,6 +3,7 @@ export interface Brand {
   brandLogoImg: string
   brandImg: string
   brandName: string
+  bizNumber: string
   companyName: string
   isPremium: boolean
   largeCategoryName: string

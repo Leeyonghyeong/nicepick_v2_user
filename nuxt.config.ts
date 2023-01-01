@@ -6,6 +6,10 @@ export default defineNuxtConfig({
       titleTemplate: '창업할 땐 창업픽 %s',
       meta: [
         {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1.0, user-scalable=no',
+        },
+        {
           name: 'keywords',
           content:
             '창업, 창업플랫폼, 프랜차이즈 창업, 창업픽, 창업사이트, 프랜차이즈, 창업박람회, 소자본창업, 자영업, 가맹점, 프랜차이즈 박람회, 카페창업, 청년창업, 무인창업, 창업준비, 창업정보, 창업비용, 배달창업, 체인점, 프랜차이즈 순위',

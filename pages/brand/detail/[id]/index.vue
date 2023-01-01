@@ -53,13 +53,15 @@ if (statusItem.success) {
 if (companyItem.success) {
   brandCompanyItem.value = companyItem.brand
 
+  const bizNumber = brandCompanyItem.value.brandNormalStatus
+    ? brandCompanyItem.value.brandNormalStatus.bizNumber
+    : brandCompanyItem.value.bizNumber
+
   const { data } = await api.get<{
     brand: Brand[]
     success: boolean
     errorMessage: string
-  }>(
-    `/brand/detail/same/${brandCompanyItem.value.brandNormalStatus.bizNumber}/${route.params.id}`
-  )
+  }>(`/brand/detail/same/${bizNumber}/${route.params.id}`)
 
   if (data.success) {
     brandSameListItems.value = data.brand

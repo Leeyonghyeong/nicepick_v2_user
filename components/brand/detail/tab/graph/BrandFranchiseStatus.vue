@@ -1,6 +1,11 @@
 <template>
-  <section>
-    <article ref="chartElement" :style="{ height: `${height}px` }"></article>
+  <section style="height: 100%">
+    <article
+      v-if="brandFranchiseStatus.length > 0"
+      ref="chartElement"
+      :style="{ height: `${height}px`, paddingTop: '20px' }"
+    ></article>
+    <EmptyChart v-else />
   </section>
 </template>
 
@@ -16,6 +21,7 @@ import {
 } from 'echarts/components'
 import { BarChart, BarSeriesOption } from 'echarts/charts'
 import { CanvasRenderer } from 'echarts/renderers'
+import EmptyChart from './EmptyChart.vue'
 import { BrandFranchiseStatus } from '~~/types/brand'
 
 const props = defineProps<{
@@ -95,7 +101,10 @@ onMounted(() => {
         {
           name: '가맹점 및 직영점 수',
           type: 'bar',
-          barWidth: '10%',
+          barMaxWidth: 20,
+          itemStyle: {
+            borderRadius: [50, 50, 0, 0],
+          },
           color: '#FF9264',
           emphasis: {
             focus: 'series',

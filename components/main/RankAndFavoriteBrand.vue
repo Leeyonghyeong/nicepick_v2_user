@@ -50,6 +50,7 @@
             v-for="item in favoriteBrandItems"
             :key="item.id"
             class="favorite-item"
+            @click="$router.push(`/brand/detail/${item.id}`)"
           >
             <div class="brand-image">
               <img :src="item.brandImg" :alt="item.brandName" />
