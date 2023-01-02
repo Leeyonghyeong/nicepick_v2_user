@@ -10,11 +10,6 @@ export default defineNuxtConfig({
           content: 'width=device-width, initial-scale=1.0, user-scalable=no',
         },
         {
-          name: 'keywords',
-          content:
-            '창업, 창업플랫폼, 프랜차이즈 창업, 창업픽, 창업사이트, 프랜차이즈, 창업박람회, 소자본창업, 자영업, 가맹점, 프랜차이즈 박람회, 카페창업, 청년창업, 무인창업, 창업준비, 창업정보, 창업비용, 배달창업, 체인점, 프랜차이즈 순위',
-        },
-        {
           name: 'description',
           content:
             '프랜차이즈의 모든 정보를 한눈에 비교 분석은 창업픽에서 시작하세요!! 브랜드별 매출, 창업비용, 가맹점 수등을 한번에 비교하고 상권분석을 통해 최적의 입지에 창업을 도와드립니다.',
@@ -38,6 +33,10 @@ export default defineNuxtConfig({
         {
           property: 'og:url',
           content: 'http://3.38.51.90/',
+        },
+        {
+          property: 'og:site:name',
+          content: '창업할 땐 창업픽',
         },
       ],
       link: [
