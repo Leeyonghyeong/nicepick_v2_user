@@ -145,11 +145,18 @@ onMounted(() => {
     const option: EChartsOption = {
       tooltip: {
         trigger: 'item',
+        backgroundColor: '#191919',
+        textStyle: {
+          color: '#fff',
+        },
       },
       legend: {
         data: legendData,
         icon: 'circle',
         show: true,
+        textStyle: {
+          fontWeight: 600,
+        },
       },
       xAxis: {
         type: 'category',

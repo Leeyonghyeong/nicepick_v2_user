@@ -85,6 +85,10 @@ onMounted(() => {
     const option: EChartsOption = {
       tooltip: {
         trigger: 'axis',
+        backgroundColor: '#191919',
+        textStyle: {
+          color: '#fff',
+        },
       },
       xAxis: {
         type: 'category',

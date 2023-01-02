@@ -97,10 +97,17 @@ onMounted(() => {
     const option: EChartsOption = {
       tooltip: {
         trigger: 'axis',
+        backgroundColor: '#191919',
+        textStyle: {
+          color: '#fff',
+        },
       },
       legend: {
         data: ['신규개점', '계약종료', '계약해지', '명의변경'],
         icon: 'circle',
+        textStyle: {
+          fontWeight: 600,
+        },
       },
       xAxis: {
         type: 'category',

@@ -93,10 +93,17 @@ onMounted(() => {
     const option: EChartsOption = {
       tooltip: {
         trigger: 'axis',
+        backgroundColor: '#191919',
+        textStyle: {
+          color: '#fff',
+        },
       },
       legend: {
         data: ['자산', '자본', '부채'],
         icon: 'circle',
+        textStyle: {
+          fontWeight: 600,
+        },
       },
       xAxis: {
         type: 'category',

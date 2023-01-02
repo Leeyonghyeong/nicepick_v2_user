@@ -80,10 +80,17 @@ onMounted(() => {
     const option: EChartsOption = {
       tooltip: {
         trigger: 'axis',
+        backgroundColor: '#191919',
+        textStyle: {
+          color: '#fff',
+        },
       },
       legend: {
         data: ['가맹점 및 직영점 수'],
         icon: 'circle',
+        textStyle: {
+          fontWeight: 600,
+        },
       },
       xAxis: {
         type: 'category',

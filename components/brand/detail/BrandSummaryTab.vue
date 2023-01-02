@@ -214,6 +214,7 @@ defineProps<{
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          font-weight: 500;
 
           &.price {
             color: $mainColor;
