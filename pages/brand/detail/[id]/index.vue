@@ -84,6 +84,10 @@ if (brandIntroItem.value) {
             : 'https://nicepick.s3.ap-northeast-2.amazonaws.com/etc/main.jpeg'
         }`,
       },
+      {
+        property: 'og:url',
+        content: `http://3.38.51.90/brand/detail/${route.params.id}`,
+      },
     ],
   })
 }

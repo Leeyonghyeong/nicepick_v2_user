@@ -37,7 +37,7 @@ export default defineNuxtConfig({
         },
         {
           property: 'og:url',
-          content: 'https://nicepick.co.kr',
+          content: 'http://3.38.51.90/',
         },
       ],
       link: [
