@@ -38,6 +38,10 @@ export default defineNuxtConfig({
           property: 'og:site:name',
           content: '창업할 땐 창업픽',
         },
+        {
+          property: 'og:site_name',
+          content: '창업할 땐 창업픽',
+        },
       ],
       link: [
         {
