@@ -17,7 +17,7 @@
               <img
                 src="~/assets/img/close/close_black.png"
                 alt="close"
-                @click="$emit('closeSearchModal')"
+                @click="closeModalAndHistoryBack"
               />
             </div>
           </div>
@@ -43,6 +43,7 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { useBrandListStore } from '~~/store/brandList'
 import { useKeywordRankStore } from '~~/store/keywordRank'
 
 const emit = defineEmits<{
@@ -50,17 +51,30 @@ const emit = defineEmits<{
 }>()
 
 const keywordRankStore = useKeywordRankStore()
+const brandListStore = useBrandListStore()
 const { currentRank } = storeToRefs(keywordRankStore)
+const { searchList, searchListPage, searchListNextPage, searchListTotalCount } =
+  storeToRefs(brandListStore)
 
 if (currentRank.value.length === 0) {
   keywordRankStore.addKeywordRank()
 }
 
+const route = useRoute()
 const router = useRouter()
 const keyword = ref<string>('')
 
 const checkValidateInput = () => {
   if (keyword.value) {
+    if (route.params.keyword === keyword.value) {
+      emit('closeSearchModal')
+      return
+    }
+
+    searchList.value = []
+    searchListPage.value = 1
+    searchListNextPage.value = false
+    searchListTotalCount.value = 0
     emit('closeSearchModal')
     router.push(`/search/${keyword.value.replaceAll('/', '%2F')}`)
   } else {
@@ -68,12 +82,24 @@ const checkValidateInput = () => {
   }
 }
 
+const closeModal = () => {
+  emit('closeSearchModal')
+}
+
+const closeModalAndHistoryBack = () => {
+  emit('closeSearchModal')
+  history.back()
+}
+
 onMounted(() => {
   document.body.setAttribute('style', 'overflow: hidden')
+  window.history.pushState({ page: 'modal' }, '', '#modal')
+  window.addEventListener('popstate', closeModal)
 })
 
 onUnmounted(() => {
   document.body.removeAttribute('style')
+  window.removeEventListener('popstate', closeModal)
 })
 </script>
 

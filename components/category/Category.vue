@@ -19,51 +19,56 @@
           />
         </div>
         <div v-if="isShowLargeCategoryList" class="large-category-list">
-          <div v-for="item in category" :key="item.id" class="large-item">
-            <NuxtLink
-              :to="`/category/${item.categoryName.replaceAll('/', '%2F')}`"
-              :class="{ active: item.categoryName === route.params.large }"
-            >
-              {{ item.categoryName }}
-            </NuxtLink>
+          <div
+            v-for="item in category"
+            :key="item.id"
+            class="large-item"
+            @click="
+              selectCategoryHandler(
+                `/category/${item.categoryName.replaceAll('/', '%2F')}`
+              )
+            "
+          >
+            {{ item.categoryName }}
           </div>
         </div>
       </div>
       <div ref="smallCategoryList" class="small-category-list">
-        <div class="small-item" :class="{ active: !route.params.small }">
-          <NuxtLink
-            :to="`/category/${currentLargeCategory?.categoryName.replaceAll(
-              '/',
-              '%2F'
-            )}`"
-            style="height: 20px"
-            >전체
-          </NuxtLink>
+        <div
+          class="small-item"
+          :class="{ active: !route.params.small }"
+          @click="
+            selectCategoryHandler(
+              `/category/${currentLargeCategory?.categoryName.replaceAll(
+                '/',
+                '%2F'
+              )}`
+            )
+          "
+        >
+          전체
         </div>
         <div
           v-for="item in currentLargeCategory?.smallCategory"
           :key="item.id"
           class="small-item"
           :class="{ active: route.params.small === item.categoryName }"
+          @click="
+            selectCategoryHandler(
+              `/category/${currentLargeCategory?.categoryName.replaceAll(
+                '/',
+                '%2F'
+              )}/${item.categoryName.replaceAll('/', '%2F')}`
+            )
+          "
         >
-          <NuxtLink
-            :to="`/category/${currentLargeCategory?.categoryName.replaceAll(
-              '/',
-              '%2F'
-            )}/${item.categoryName.replaceAll('/', '%2F')}`"
-          >
-            <img
-              v-if="route.query.s !== item.categoryName"
-              :src="item.categoryImg"
-              :alt="item.categoryName"
-            />
-            <img
-              v-else
-              :src="item.categoryActiveImg"
-              :alt="item.categoryName"
-            />
-            {{ item.categoryName }}
-          </NuxtLink>
+          <img
+            v-if="route.query.s !== item.categoryName"
+            :src="item.categoryImg"
+            :alt="item.categoryName"
+          />
+          <img v-else :src="item.categoryActiveImg" :alt="item.categoryName" />
+          {{ item.categoryName }}
         </div>
         <div
           v-if="
@@ -120,13 +125,20 @@ import { storeToRefs } from 'pinia'
 import { useCategoryStore } from '~~/store/category'
 import { LargeCategory } from '~/types/category'
 import { useWindowStore } from '~~/store/window'
+import { useBrandListStore } from '~/store/brandList'
 import api from '~/config/axios.config'
-import { Brand } from '~~/types/brand'
 
 const categoryStore = useCategoryStore()
 const windowStore = useWindowStore()
+const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
+const {
+  categoryList: brandItems,
+  categoryListPage: page,
+  categoryListNextPage: nextPage,
+  categoryListTotalCount: totalCount,
+} = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   await categoryStore.getCategory()
@@ -141,10 +153,6 @@ const isShowLargeCategoryList = ref<boolean>(false)
 const smallCategoryList = ref<HTMLDivElement | null>(null)
 const isShowButtonLeft = ref<boolean>(false)
 
-const brandItems = ref<Brand[]>([])
-const nextPage = ref<boolean>(false)
-const page = ref<number>(1)
-const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
   return getDevice.value === 'pc' ? 10 : getDevice.value === 'tablet' ? 8 : 6
 })
@@ -184,18 +192,26 @@ const getBrandItems = async () => {
 }
 
 const nextBrandItems = async () => {
-  page.value++
-  const { large, small } = route.params
-  const { data } = await api.get(
-    `/brand/search/category?l=${large}&s=${small}&sortType=p&type=${
-      small ? 's' : 'l'
-    }&page=${page.value}&pageNum=${pageNum.value}`
-  )
+  if (brandItems.value.length === 0) {
+    getBrandItems()
+    return
+  }
 
-  if (data.success) {
-    totalCount.value = data.page.totalCount
-    nextPage.value = data.page.next
-    brandItems.value.push(...data.brand)
+  if (nextPage.value) {
+    page.value++
+
+    const { large, small } = route.params
+    const { data } = await api.get(
+      `/brand/search/category?l=${large}&s=${small}&sortType=p&type=${
+        small ? 's' : 'l'
+      }&page=${page.value}&pageNum=${pageNum.value}`
+    )
+
+    if (data.success) {
+      totalCount.value = data.page.totalCount
+      nextPage.value = data.page.next
+      brandItems.value.push(...data.brand)
+    }
   }
 }
 
@@ -212,16 +228,33 @@ const isShowLargeCategoryHandler = () => {
   }
 }
 
+const selectCategoryHandler = (url: string) => {
+  if (route.path === url) {
+    return
+  }
+
+  brandItems.value = []
+  page.value = 1
+  nextPage.value = false
+  totalCount.value = 0
+
+  router.push(url)
+}
+
 let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)
 
 onMounted(() => {
   initCurrentLargeCategory()
-  getBrandItems()
+  if (brandItems.value.length === 0) {
+    getBrandItems()
+  }
 
   io = new IntersectionObserver(
     () => {
-      nextBrandItems()
+      if (nextPage.value) {
+        nextBrandItems()
+      }
     },
     {
       threshold: 0,
@@ -316,29 +349,23 @@ section {
         border-radius: 20px;
         border: 1px solid #ebebeb;
         margin-right: 8px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: $fontSubColor;
+
+        img {
+          width: 20px;
+          margin-right: 2px;
+        }
 
         &:last-child {
           margin-right: 0;
         }
 
-        a {
-          display: flex;
-          align-items: center;
-          cursor: pointer;
-          color: $fontSubColor;
-
-          img {
-            width: 20px;
-            margin-right: 2px;
-          }
-        }
-
         &.active {
           border-color: $mainColor;
-
-          a {
-            color: $mainColor;
-          }
+          color: $mainColor;
         }
       }
 

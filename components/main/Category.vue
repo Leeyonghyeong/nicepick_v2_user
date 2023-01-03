@@ -18,10 +18,18 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { useBrandListStore } from '~~/store/brandList'
 import { useCategoryStore } from '~~/store/category'
 
 const categoryStore = useCategoryStore()
+const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
+const {
+  categoryList,
+  categoryListPage,
+  categoryListNextPage,
+  categoryListTotalCount,
+} = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   categoryStore.getCategory()
@@ -30,6 +38,10 @@ if (category.value.length === 0) {
 const router = useRouter()
 
 const moveCategoryPage = (l: string) => {
+  categoryList.value = []
+  categoryListPage.value = 1
+  categoryListNextPage.value = false
+  categoryListTotalCount.value = 0
   router.push(`/category/${l.replaceAll('/', '%2F')}`)
 }
 </script>

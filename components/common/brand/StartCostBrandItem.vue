@@ -43,7 +43,8 @@
     <div class="brand-name">{{ brandItem.brandName }}</div>
     <div class="brand-start-cost">
       <div>
-        창업비 {{ calcPrice(brandItem.brandStartCost.startTotalPrice) }}
+        창업비
+        {{ calcPrice(brandItem.brandStartCost.startTotalPrice) }}
       </div>
       <div>{{ brandItem.brandStartCost.standardArea }}㎡</div>
     </div>
@@ -59,6 +60,7 @@ import { useCategoryStore } from '~~/store/category'
 
 defineProps<{
   brandItem: Brand
+  index: number
 }>()
 
 const categoryStore = useCategoryStore()
@@ -67,7 +69,6 @@ const { category } = storeToRefs(categoryStore)
 
 <style lang="scss" scoped>
 .brand-start-cost-item {
-  width: 100%;
   cursor: pointer;
   .brand-image {
     width: 100%;

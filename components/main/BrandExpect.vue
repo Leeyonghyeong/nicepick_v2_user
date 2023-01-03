@@ -4,15 +4,13 @@
       <div class="top">
         <div class="title">앞으로 기대되는 유망 브랜드</div>
         <div class="page">
-          <div class="show-all">
-            <NuxtLink to="/brand/expect">
-              전체보기
-              <img
-                v-if="getDevice === 'mobile'"
-                src="~/assets/img/arrow/more.png"
-                alt="more"
-              />
-            </NuxtLink>
+          <div class="show-all" @click="moveShowAllPage">
+            전체보기
+            <img
+              v-if="getDevice === 'mobile'"
+              src="~/assets/img/arrow/more.png"
+              alt="more"
+            />
           </div>
           <div v-if="getDevice !== 'mobile'" class="page-button">
             <img
@@ -56,9 +54,15 @@ import { storeToRefs } from 'pinia'
 import { useWindowStore } from '~~/store/window'
 import api from '~/config/axios.config'
 import { Brand } from '~/types/brand'
+import { useBrandListStore } from '~~/store/brandList'
 
 const windowStore = useWindowStore()
+const brandListStore = useBrandListStore()
 const { getDevice } = storeToRefs(windowStore)
+const { expectList, expectListPage, expectListNextPage, expectListTotalCount } =
+  storeToRefs(brandListStore)
+
+const router = useRouter()
 
 const brandItems = ref<Brand[]>([])
 const nextPage = ref<boolean>(false)
@@ -99,6 +103,15 @@ const changePage = (type: string): void => {
   }
 }
 
+const moveShowAllPage = () => {
+  expectList.value = []
+  expectListPage.value = 1
+  expectListNextPage.value = false
+  expectListTotalCount.value = 0
+
+  router.push('/brand/expect')
+}
+
 onMounted(() => {
   getBrnadItems()
 })
@@ -137,12 +150,10 @@ section {
         display: flex;
         align-items: center;
         .show-all {
-          a {
-            font-size: 12px;
-            font-weight: 400;
-            color: $fontSubColor;
-            cursor: pointer;
-          }
+          font-size: 12px;
+          font-weight: 400;
+          color: $fontSubColor;
+          cursor: pointer;
         }
 
         .page-button {
@@ -186,14 +197,12 @@ section {
         }
         .page {
           .show-all {
-            a {
-              display: flex;
-              align-items: center;
+            display: flex;
+            align-items: center;
 
-              img {
-                width: 20px;
-                height: 20px;
-              }
+            img {
+              width: 20px;
+              height: 20px;
             }
           }
         }

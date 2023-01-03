@@ -2,7 +2,7 @@
   <section class="image-modal">
     <article class="image-modal-wrapper">
       <div class="image-box">
-        <div class="close-modal" @click="$emit('closeImageModalHandler')">
+        <div class="close-modal" @click="closeModalAndHistoryBack">
           <img src="~/assets/img/close/close_white.png" alt="close" />
         </div>
         <div class="image">
@@ -34,7 +34,7 @@ const props = defineProps<{
   currentUrl: string
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'closeImageModalHandler'): void
 }>()
 
@@ -53,12 +53,24 @@ const changeImageHandler = (type: string) => {
   }
 }
 
+const closeModal = () => {
+  emit('closeImageModalHandler')
+}
+
+const closeModalAndHistoryBack = () => {
+  emit('closeImageModalHandler')
+  history.back()
+}
+
 onMounted(() => {
   document.body.setAttribute('style', 'overflow: hidden;')
+  window.history.pushState({ page: 'modal' }, '', '#modal')
+  window.addEventListener('popstate', closeModal)
 })
 
 onUnmounted(() => {
   document.body.removeAttribute('style')
+  window.removeEventListener('popstate', closeModal)
 })
 </script>
 

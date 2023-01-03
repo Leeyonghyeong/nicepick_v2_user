@@ -32,15 +32,16 @@
           </div>
         </div>
         <div class="page-button">
-          <div class="show-all">
-            <NuxtLink :to="`/theme/${currentTheme}`">
-              전체보기
-              <img
-                v-if="getDevice === 'mobile'"
-                src="~/assets/img/arrow/more.png"
-                alt="more"
-              />
-            </NuxtLink>
+          <div
+            class="show-all"
+            @click="moveShowAllPage(`/theme/${currentTheme}`)"
+          >
+            전체보기
+            <img
+              v-if="getDevice === 'mobile'"
+              src="~/assets/img/arrow/more.png"
+              alt="more"
+            />
           </div>
           <div v-if="getDevice !== 'mobile'" class="button">
             <img
@@ -83,11 +84,17 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import api from '~/config/axios.config'
+import { useBrandListStore } from '~~/store/brandList'
 import { useWindowStore } from '~~/store/window'
 import { Brand } from '~~/types/brand'
 
 const windowStore = useWindowStore()
+const brandListStore = useBrandListStore()
 const { getDevice } = storeToRefs(windowStore)
+const { themeList, themeListPage, themeListNextPage, themeListTotalCount } =
+  storeToRefs(brandListStore)
+
+const router = useRouter()
 
 const themeBrandItems = ref<Brand[]>([])
 
@@ -128,6 +135,15 @@ const changePage = (type: string): void => {
     page.value--
     getThemeBrand()
   }
+}
+
+const moveShowAllPage = (url: string) => {
+  themeList.value = []
+  themeListPage.value = 1
+  themeListNextPage.value = false
+  themeListTotalCount.value = 0
+
+  router.push(url)
 }
 
 onMounted(() => {
@@ -194,10 +210,7 @@ section {
 
         .show-all {
           cursor: pointer;
-
-          a {
-            color: $fontSubColor;
-          }
+          color: $fontSubColor;
         }
 
         .button {
@@ -311,14 +324,12 @@ section {
           right: 0;
 
           .show-all {
-            a {
-              display: flex;
-              align-items: center;
+            display: flex;
+            align-items: center;
 
-              img {
-                width: 20px;
-                height: 20px;
-              }
+            img {
+              width: 20px;
+              height: 20px;
             }
           }
         }

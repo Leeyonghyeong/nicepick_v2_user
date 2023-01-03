@@ -76,12 +76,19 @@ import { storeToRefs } from 'pinia'
 import { useCategoryStore } from '~~/store/category'
 import { useWindowStore } from '~~/store/window'
 import api from '~/config/axios.config'
-import { Brand } from '~~/types/brand'
+import { useBrandListStore } from '~~/store/brandList'
 
 const categoryStore = useCategoryStore()
 const windowStore = useWindowStore()
+const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
+const {
+  themeList: brandItems,
+  themeListPage: page,
+  themeListNextPage: nextPage,
+  themeListTotalCount: totalCount,
+} = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   await categoryStore.getCategory()
@@ -90,10 +97,6 @@ if (category.value.length === 0) {
 const route = useRoute()
 const router = useRouter()
 
-const brandItems = ref<Brand[]>([])
-const nextPage = ref<boolean>(false)
-const page = ref<number>(1)
-const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
   return getDevice.value === 'pc' ? 10 : getDevice.value === 'tablet' ? 8 : 6
 })
@@ -113,20 +116,36 @@ const getBrandItems = async () => {
 }
 
 const nextBrandItems = async () => {
-  page.value++
-  const { type } = route.params
-  const { data } = await api.get(
-    `/brand/search/theme/${type}?sortType=p&page=${page.value}&pageNum=${pageNum.value}`
-  )
+  if (brandItems.value.length === 0) {
+    getBrandItems()
+    return
+  }
 
-  if (data.success) {
-    totalCount.value = data.page.totalCount
-    nextPage.value = data.page.next
-    brandItems.value.push(...data.brand)
+  if (nextPage.value) {
+    page.value++
+    const { type } = route.params
+    const { data } = await api.get(
+      `/brand/search/theme/${type}?sortType=p&page=${page.value}&pageNum=${pageNum.value}`
+    )
+
+    if (data.success) {
+      totalCount.value = data.page.totalCount
+      nextPage.value = data.page.next
+      brandItems.value.push(...data.brand)
+    }
   }
 }
 
 const changeTheme = (type: string) => {
+  if (route.params.type === type) {
+    return
+  }
+
+  brandItems.value = []
+  page.value = 1
+  nextPage.value = false
+  totalCount.value = 0
+
   router.push(`/theme/${type}`)
 }
 
@@ -134,11 +153,15 @@ let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)
 
 onMounted(() => {
-  getBrandItems()
+  if (brandItems.value.length === 0) {
+    getBrandItems()
+  }
 
   io = new IntersectionObserver(
     () => {
-      nextBrandItems()
+      if (nextPage.value) {
+        nextBrandItems()
+      }
     },
     {
       threshold: 0,

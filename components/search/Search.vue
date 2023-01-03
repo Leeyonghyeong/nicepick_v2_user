@@ -13,6 +13,13 @@
         {{ $route.params.keyword }}
         <span v-if="getDevice !== 'mobile'">검색 결과</span>
       </div>
+      <div v-if="getDevice === 'mobile'" class="mobile-search-modal">
+        <img
+          src="~/assets/img/close/close_black.png"
+          alt="search"
+          @click="isShowSearchModal = true"
+        />
+      </div>
     </article>
 
     <CommonBrandRecommendBrandItem background-color="#F8FAFD" />
@@ -31,19 +38,30 @@
     </article>
     <div ref="infinity" class="observer"></div>
   </section>
+  <ModalSearchModal
+    v-if="isShowSearchModal"
+    @close-search-modal="closeSearchModal"
+  />
 </template>
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { useWindowStore } from '~~/store/window'
-import { Brand } from '~~/types/brand'
 import api from '~/config/axios.config'
 import { useCategoryStore } from '~~/store/category'
+import { useBrandListStore } from '~~/store/brandList'
 
 const categoryStore = useCategoryStore()
 const windowStore = useWindowStore()
+const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
+const {
+  searchList: brandItems,
+  searchListPage: page,
+  searchListNextPage: nextPage,
+  searchListTotalCount: totalCount,
+} = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   await categoryStore.getCategory()
@@ -51,10 +69,6 @@ if (category.value.length === 0) {
 
 const route = useRoute()
 
-const brandItems = ref<Brand[]>([])
-const nextPage = ref<boolean>(false)
-const page = ref<number>(1)
-const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
   return getDevice.value === 'pc' ? 10 : getDevice.value === 'tablet' ? 8 : 6
 })
@@ -74,28 +88,45 @@ const getBrandItems = async () => {
 }
 
 const nextBrandItems = async () => {
-  page.value++
-  const { keyword } = route.params
-  const { data } = await api.get(
-    `/brand/search?keyword=${keyword}&sortType=p&page=${page.value}&pageNum=${pageNum.value}`
-  )
-
-  if (data.success) {
-    totalCount.value = data.page.totalCount
-    nextPage.value = data.page.next
-    brandItems.value.push(...data.brand)
+  if (brandItems.value.length === 0) {
+    getBrandItems()
+    return
   }
+
+  if (nextPage.value) {
+    page.value++
+    const { keyword } = route.params
+    const { data } = await api.get(
+      `/brand/search?keyword=${keyword}&sortType=p&page=${page.value}&pageNum=${pageNum.value}`
+    )
+
+    if (data.success) {
+      totalCount.value = data.page.totalCount
+      nextPage.value = data.page.next
+      brandItems.value.push(...data.brand)
+    }
+  }
+}
+
+const isShowSearchModal = ref<boolean>(false)
+
+const closeSearchModal = () => {
+  isShowSearchModal.value = false
 }
 
 let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)
 
 onMounted(() => {
-  getBrandItems()
+  if (brandItems.value.length === 0) {
+    getBrandItems()
+  }
 
   io = new IntersectionObserver(
     () => {
-      nextBrandItems()
+      if (nextPage.value) {
+        nextBrandItems()
+      }
     },
     {
       threshold: 0,
@@ -181,6 +212,10 @@ section {
       align-items: center;
       height: 60px;
       border-bottom: 1px solid $sectionLine;
+      position: sticky;
+      top: 0;
+      background-color: #fff;
+      z-index: 1;
 
       div {
         color: $fontMainColor;
@@ -192,11 +227,24 @@ section {
           margin: 0;
           margin-right: 8px;
         }
+
+        &.mobile-search-modal {
+          position: absolute;
+          right: 24px;
+
+          img {
+            width: 30px;
+          }
+        }
       }
     }
 
     .list {
       @include mobile-container();
+      padding: {
+        top: 30px;
+        bottom: 30px;
+      }
 
       .empty {
         font-size: 14px;

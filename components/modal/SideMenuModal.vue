@@ -7,7 +7,7 @@
           <img
             src="~/assets/img/close/close_black.png"
             alt="close"
-            @click="$emit('showAndCloseSideMenuModal')"
+            @click="closeModalAndHistoryBack"
           />
         </div>
       </div>
@@ -78,16 +78,28 @@ defineProps<{
   subMenu: SubMenu
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   (e: 'showAndCloseSideMenuModal'): void
 }>()
 
+const closeModal = () => {
+  emit('showAndCloseSideMenuModal')
+}
+
+const closeModalAndHistoryBack = () => {
+  emit('showAndCloseSideMenuModal')
+  history.back()
+}
+
 onMounted(() => {
   document.body.setAttribute('style', 'overflow: hidden;')
+  window.history.pushState({ page: 'modal' }, '', '#modal')
+  window.addEventListener('popstate', closeModal)
 })
 
 onUnmounted(() => {
   document.body.removeAttribute('style')
+  window.removeEventListener('popstate', closeModal)
 })
 
 const isShowDropdown = reactive<boolean[]>([false, false])
