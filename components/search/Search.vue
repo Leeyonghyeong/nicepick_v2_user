@@ -34,7 +34,7 @@
             :style="{
               flexBasis:
                 getDevice === 'pc'
-                  ? '214.8px'
+                  ? 'calc((100% - 120px) / 5)'
                   : getDevice === 'tablet'
                   ? 'calc((100% - 72px) / 4)'
                   : 'calc((100% - 16px) / 3)',
@@ -65,11 +65,13 @@
           />
           <CommonAdBanner
             v-if="getDevice === 'tablet' && !((index + 1) % 12)"
-            style="margin: 0 -44px 60px -44px; width: 100vw"
+            style="margin: 0 -44px 60px"
+            width="100vw"
           />
           <CommonAdBanner
             v-if="getDevice === 'mobile' && !((index + 1) % 9)"
-            style="margin: 0 -24px 30px -24px; width: 100vw"
+            style="margin: 0 -24px 30px"
+            width="100vw"
           />
         </template>
       </CommonBrandItemListAdWrapper>

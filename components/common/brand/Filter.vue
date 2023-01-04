@@ -3,17 +3,26 @@
     <div class="total-count">
       <span>{{ totalCount }}개</span> 브랜드
     </div>
-    <div class="filter">
+    <div class="filter" @click="isShowFilterModal = true">
       필터<img src="~/assets/img/common/filter.png" alt="filter" />
     </div>
   </div>
-  <!-- <ModalBrandListFilterModal /> -->
+  <ModalBrandListFilterModal
+    v-if="isShowFilterModal"
+    @close-modal="closeModal"
+  />
 </template>
 
 <script lang="ts" setup>
 defineProps<{
   totalCount: number
 }>()
+
+const isShowFilterModal = ref<boolean>(false)
+
+const closeModal = () => {
+  isShowFilterModal.value = false
+}
 </script>
 
 <style lang="scss" scoped>

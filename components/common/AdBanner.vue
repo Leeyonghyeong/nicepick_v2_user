@@ -1,6 +1,6 @@
 <template>
-  <section>
-    <article :style="{ width, height }">
+  <section :style="{ width }">
+    <article :style="{ height }">
       <div class="ad-wrapper" :style="{ backgroundColor }">
         <div class="ad">AD</div>
         <div class="ad-text">
