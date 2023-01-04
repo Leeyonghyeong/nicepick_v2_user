@@ -7,6 +7,7 @@
       필터<img src="~/assets/img/common/filter.png" alt="filter" />
     </div>
   </div>
+  <!-- <ModalBrandListFilterModal /> -->
 </template>
 
 <script lang="ts" setup>

@@ -60,7 +60,6 @@ import { useCategoryStore } from '~~/store/category'
 
 defineProps<{
   brandItem: Brand
-  index: number
 }>()
 
 const categoryStore = useCategoryStore()
@@ -137,6 +136,12 @@ const { category } = storeToRefs(categoryStore)
       border: 1px solid $iconLine;
       border-radius: 3px;
       margin-left: 6px;
+    }
+  }
+
+  @include tablet {
+    .brand-start-cost {
+      font-size: 11px;
     }
   }
 

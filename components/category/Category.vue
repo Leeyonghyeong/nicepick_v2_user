@@ -108,13 +108,52 @@
     <article class="list">
       <CommonBrandFilter :total-count="totalCount" />
 
-      <CommonBrandItemListWrapper>
-        <CommonBrandStartCostBrandItem
-          v-for="item in brandItems"
-          :key="item.id"
-          :brand-item="item"
-        />
-      </CommonBrandItemListWrapper>
+      <CommonBrandItemListAdWrapper>
+        <template v-for="(item, index) in brandItems" :key="item.id">
+          <CommonBrandStartCostBrandItem
+            :brand-item="item"
+            :style="{
+              flexBasis:
+                getDevice === 'pc'
+                  ? '214.8px'
+                  : getDevice === 'tablet'
+                  ? 'calc((100% - 72px) / 4)'
+                  : 'calc((100% - 16px) / 3)',
+              marginBottom:
+                getDevice === 'pc'
+                  ? '80px'
+                  : getDevice === 'tablet'
+                  ? '60px'
+                  : '30px',
+              marginRight:
+                getDevice === 'pc'
+                  ? !((index + 1) % 5)
+                    ? '0'
+                    : '30px'
+                  : getDevice === 'tablet'
+                  ? !((index + 1) % 4)
+                    ? '0'
+                    : '24px'
+                  : !((index + 1) % 3)
+                  ? '0'
+                  : '8px',
+              overflow: 'hidden',
+            }"
+          />
+          <CommonAdBanner
+            v-if="getDevice === 'pc' && !((index + 1) % 15)"
+            style="margin: 0 0 80px 0"
+          />
+          <CommonAdBanner
+            v-if="getDevice === 'tablet' && !((index + 1) % 12)"
+            style="margin: 0 -44px 60px -44px; width: 100vw"
+          />
+          <CommonAdBanner
+            v-if="getDevice === 'mobile' && !((index + 1) % 9)"
+            style="margin: 0 -24px 30px -24px; width: 100vw"
+          />
+        </template>
+      </CommonBrandItemListAdWrapper>
     </article>
     <div ref="infinity" class="observer"></div>
   </section>
