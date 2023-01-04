@@ -212,7 +212,7 @@ section {
     @include pc-container();
     padding: {
       top: 50px;
-      bottom: 108px;
+      bottom: 28px;
     }
 
     .empty {
@@ -239,7 +239,6 @@ section {
       @include tablet-container();
       padding: {
         top: 50px;
-        bottom: 60px;
       }
     }
   }
@@ -282,7 +281,6 @@ section {
       @include mobile-container();
       padding: {
         top: 30px;
-        bottom: 30px;
       }
 
       .empty {
