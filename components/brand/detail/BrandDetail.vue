@@ -23,13 +23,18 @@
       </div>
     </div>
     <article class="brand-info">
-      <article class="right">
-        <div v-if="brandIntroItem.brandImg" class="brand-main-img">
+      <article ref="test2" class="right">
+        <div
+          v-if="brandIntroItem.brandImg"
+          ref="brandImageEl"
+          class="brand-main-img"
+        >
           <img :src="brandIntroItem.brandImg" :alt="brandIntroItem.brandName" />
         </div>
 
         <BrandSummaryTab
           v-if="getDevice !== 'pc'"
+          ref="summaryEl"
           :brand-status-item="brandStatusItem"
           :get-device="getDevice"
           :category="category"
@@ -39,6 +44,7 @@
           v-if="
             brandIntroItem.brandPromotion || brandIntroItem.brandPromotionIcon
           "
+          ref="promotionEl"
           class="brand-promotion"
         >
           <div class="title">프로모션</div>
@@ -99,24 +105,24 @@
           </div>
         </div>
 
-        <div class="brand-info-tab-menu">
+        <div ref="test" class="brand-info-tab-menu">
           <div class="tab-menu-wrapper">
             <div
               v-if="isTabMenuActive[0] || isShowIntroTabButton"
               :class="{ active: isTabMenuActive[0] }"
-              @click="isTabMenuActive = [true, false, false]"
+              @click="changeTabMenu('intro')"
             >
               브랜드 소개
             </div>
             <div
               :class="{ active: isTabMenuActive[1] }"
-              @click="isTabMenuActive = [false, true, false]"
+              @click="changeTabMenu('status')"
             >
               브랜드 현황
             </div>
             <div
               :class="{ active: isTabMenuActive[2] }"
-              @click="isTabMenuActive = [false, false, true]"
+              @click="changeTabMenu('company')"
             >
               본사 정보
             </div>
@@ -192,6 +198,9 @@ if (category.value.length === 0) {
 
 const isTabMenuActive = ref<boolean[]>([false, false, false])
 const isShowIntroTabButton = ref<boolean>(false)
+const brandImageEl = ref<HTMLDivElement | null>(null)
+const summaryEl = ref<HTMLDivElement | null>(null)
+const promotionEl = ref<HTMLDivElement | null>(null)
 
 const initTabMenuActive = () => {
   const brandIntro = props.brandIntroItem
@@ -207,6 +216,28 @@ const initTabMenuActive = () => {
     isShowIntroTabButton.value = true
   } else {
     isTabMenuActive.value = [false, true, false]
+  }
+}
+
+const changeTabMenu = (tabType: string) => {
+  const brandImageHeight: number = brandImageEl.value
+    ? brandImageEl.value.offsetHeight
+    : 0
+  const summaryHeight: number = summaryEl.value ? 300 : 0
+  const promotionHeight: number = promotionEl.value
+    ? promotionEl.value.offsetHeight
+    : 0
+
+  const totalMoveTop = brandImageHeight + summaryHeight + promotionHeight
+
+  window.scrollTo({ top: totalMoveTop })
+
+  if (tabType === 'intro') {
+    isTabMenuActive.value = [true, false, false]
+  } else if (tabType === 'status') {
+    isTabMenuActive.value = [false, true, false]
+  } else {
+    isTabMenuActive.value = [false, false, true]
   }
 }
 
@@ -367,11 +398,13 @@ section {
       top: 110px;
       height: 506px;
       width: 378px;
+      margin-bottom: 80px;
     }
   }
 
   .recommend-brand {
     @include pc-container();
+    margin-bottom: 80px;
 
     .title {
       padding-top: 50px;
@@ -422,6 +455,7 @@ section {
     .recommend-brand {
       width: 100%;
       position: relative;
+      margin-bottom: 60px;
 
       &::before {
         content: '';
@@ -536,6 +570,7 @@ section {
 
     .recommend-brand {
       width: 100%;
+      margin-bottom: 30px;
 
       .title {
         @include mobile-container();

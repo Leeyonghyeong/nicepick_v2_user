@@ -6,7 +6,12 @@
         <div class="rank-box">
           <div v-for="item in currentRank" :key="item.rank" class="rank-item">
             <div class="keyword-rank">{{ item.rank }}</div>
-            <div class="keyword">{{ item.keyword }}</div>
+            <div
+              class="keyword"
+              @click="moveSearchPage(item.keyword.replaceAll('/', '%2F'))"
+            >
+              {{ item.keyword }}
+            </div>
             <div class="variance">
               <img
                 v-if="item.variance === 'new'"
@@ -94,15 +99,20 @@ import { useWindowStore } from '~~/store/window'
 import { Brand } from '~~/types/brand'
 import { CategoryColor } from '~~/types/category'
 import { useKeywordRankStore } from '~~/store/keywordRank'
+import { useBrandListStore } from '~~/store/brandList'
 
 const windowStore = useWindowStore()
 const { getDevice } = storeToRefs(windowStore)
 const keywordRankStore = useKeywordRankStore()
 const { currentRank } = storeToRefs(keywordRankStore)
+const brandListStore = useBrandListStore()
+const { searchList } = storeToRefs(brandListStore)
 
 if (currentRank.value.length === 0) {
   keywordRankStore.addKeywordRank()
 }
+
+const router = useRouter()
 
 const favoriteBrandItems = ref<Brand[]>([])
 const page = ref<number>(1)
@@ -112,6 +122,17 @@ const totalCount = ref<number>(0)
 const pageNum = computed<number>(() => {
   return getDevice.value === 'pc' ? 12 : getDevice.value === 'tablet' ? 8 : 4
 })
+
+const moveSearchPage = (keyword: string) => {
+  searchList.value.brandItems = []
+  searchList.value.page = 1
+  searchList.value.nextPage = false
+  searchList.value.totalCount = 0
+  searchList.value.areaFilter = undefined
+  searchList.value.costFilter = undefined
+
+  router.push(`/search/${keyword}`)
+}
 
 const getFavoriteBrand = async () => {
   const { data } = await api.get(

@@ -213,7 +213,7 @@
       <div class="title">본사 임직원 수</div>
       <div class="employee-box">
         <div class="employee-wrapper">
-          <img src="~/assets/img/common/employee.png" alt="임직원 수" />
+          <i class="fa-solid fa-user-tie"></i>
           <div>
             임원
             <span
@@ -226,7 +226,7 @@
           </div>
         </div>
         <div class="employee-wrapper">
-          <img src="~/assets/img/common/employee.png" alt="임직원 수" />
+          <i class="fa-solid fa-users"></i>
           <div>
             직원
             <span
@@ -428,9 +428,11 @@ const isGraphActive = ref<boolean[]>([true, false, false, false])
         font-weight: 400;
         color: $fontSubColor;
 
-        img {
-          width: 30px;
+        i {
+          font-size: 20px;
           margin-bottom: 4px;
+          display: block;
+          color: $fontMainColor;
         }
 
         div {

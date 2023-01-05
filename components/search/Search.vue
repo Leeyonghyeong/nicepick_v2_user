@@ -25,10 +25,14 @@
     <CommonBrandRecommendBrandItem background-color="#F8FAFD" />
 
     <article class="list">
-      <CommonBrandFilter :total-count="totalCount" />
+      <CommonBrandFilter
+        :total-count="searchList.totalCount"
+        list-type="search"
+        @get-brand-items="getBrandItems"
+      />
 
-      <CommonBrandItemListAdWrapper v-if="brandItems.length > 0">
-        <template v-for="(item, index) in brandItems" :key="item.id">
+      <CommonBrandItemListAdWrapper v-if="searchList.brandItems.length > 0">
+        <template v-for="(item, index) in searchList.brandItems" :key="item.id">
           <CommonBrandStartCostBrandItem
             :brand-item="item"
             :style="{
@@ -97,12 +101,7 @@ const windowStore = useWindowStore()
 const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
-const {
-  searchList: brandItems,
-  searchListPage: page,
-  searchListNextPage: nextPage,
-  searchListTotalCount: totalCount,
-} = storeToRefs(brandListStore)
+const { searchList } = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   await categoryStore.getCategory()
@@ -115,36 +114,56 @@ const pageNum = computed<number>(() => {
 })
 
 const getBrandItems = async () => {
-  page.value = 1
+  searchList.value.page = 1
   const { keyword } = route.params
   const { data } = await api.get(
-    `/brand/search?keyword=${keyword}&sortType=p&page=${page.value}&pageNum=${pageNum.value}`
+    `/brand/search?keyword=${keyword}&sortType=p&page=${
+      searchList.value.page
+    }&pageNum=${pageNum.value}${
+      searchList.value.costFilter
+        ? `&costFilter=${searchList.value.costFilter}`
+        : ''
+    }${
+      searchList.value.areaFilter
+        ? `&areaFilter=${searchList.value.areaFilter}`
+        : ''
+    }`
   )
 
   if (data.success) {
-    totalCount.value = data.page.totalCount
-    nextPage.value = data.page.next
-    brandItems.value = data.brand
+    searchList.value.totalCount = data.page.totalCount
+    searchList.value.nextPage = data.page.next
+    searchList.value.brandItems = data.brand
   }
 }
 
 const nextBrandItems = async () => {
-  if (brandItems.value.length === 0) {
+  if (searchList.value.brandItems.length === 0) {
     getBrandItems()
     return
   }
 
-  if (nextPage.value) {
-    page.value++
+  if (searchList.value.nextPage) {
+    searchList.value.page++
     const { keyword } = route.params
     const { data } = await api.get(
-      `/brand/search?keyword=${keyword}&sortType=p&page=${page.value}&pageNum=${pageNum.value}`
+      `/brand/search?keyword=${keyword}&sortType=p&page=${
+        searchList.value.page
+      }&pageNum=${pageNum.value}${
+        searchList.value.costFilter
+          ? `&costFilter=${searchList.value.costFilter}`
+          : ''
+      }${
+        searchList.value.areaFilter
+          ? `&areaFilter=${searchList.value.areaFilter}`
+          : ''
+      }`
     )
 
     if (data.success) {
-      totalCount.value = data.page.totalCount
-      nextPage.value = data.page.next
-      brandItems.value.push(...data.brand)
+      searchList.value.totalCount = data.page.totalCount
+      searchList.value.nextPage = data.page.next
+      searchList.value.brandItems.push(...data.brand)
     }
   }
 }
@@ -159,13 +178,13 @@ let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)
 
 onMounted(() => {
-  if (brandItems.value.length === 0) {
+  if (searchList.value.brandItems.length === 0) {
     getBrandItems()
   }
 
   io = new IntersectionObserver(
     () => {
-      if (nextPage.value) {
+      if (searchList.value.nextPage) {
         nextBrandItems()
       }
     },

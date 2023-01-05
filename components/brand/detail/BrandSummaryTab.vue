@@ -224,7 +224,7 @@ defineProps<{
         .standard-area {
           margin-top: 4px;
           font-size: 10px;
-          color: #bcbcbc;
+          color: $fontSubColor;
           padding: 3px 4px;
           background-color: $sectionLine;
           border: 1px solid $iconLine;
@@ -309,6 +309,7 @@ defineProps<{
 @include mobile {
   .brand-summary-info {
     @include mobile-container();
+    margin-top: 20px;
     margin-bottom: 30px;
 
     .summary-info-box {

@@ -51,10 +51,16 @@
             <div class="title">
               <div>기준 면적</div>
               <div class="area-type">
-                <div :class="{ active: !areaType }" @click="areaType = false">
+                <div
+                  :class="{ active: !areaType }"
+                  @click="$emit('setAreaType', false)"
+                >
                   평
                 </div>
-                <div :class="{ active: areaType }" @click="areaType = true">
+                <div
+                  :class="{ active: areaType }"
+                  @click="$emit('setAreaType', true)"
+                >
                   ㎡
                 </div>
               </div>
@@ -100,7 +106,7 @@
               alt="초기화"
             />초기화
           </div>
-          <div class="submit">필터 적용</div>
+          <div class="submit" @click="setFilter">필터 적용</div>
         </div>
       </div>
     </article>
@@ -108,17 +114,81 @@
 </template>
 
 <script lang="ts" setup>
-const emit = defineEmits<{
-  (e: 'closeModal'): void
+import { storeToRefs } from 'pinia'
+import { useBrandListStore } from '~~/store/brandList'
+
+const props = defineProps<{
+  listType: string
+  areaType: boolean
 }>()
 
-const areaType = ref<boolean>(false)
-const costFilter = ref<string>('')
-const areaFilter = ref<string>('')
+const emit = defineEmits<{
+  (e: 'closeModal'): void
+  (e: 'getBrandItems'): void
+  (e: 'setFilter', cost: string | undefined, area: string | undefined): void
+  (e: 'setAreaType', bool: boolean): void
+}>()
+
+const brandListStore = useBrandListStore()
+const { categoryList, expectList, searchList, themeList } =
+  storeToRefs(brandListStore)
+
+const costFilter = ref<string>()
+const areaFilter = ref<string>()
+
+const initFilter = () => {
+  if (props.listType === 'category') {
+    costFilter.value = categoryList.value.costFilter
+    areaFilter.value = categoryList.value.areaFilter
+  } else if (props.listType === 'theme') {
+    costFilter.value = themeList.value.costFilter
+    areaFilter.value = themeList.value.areaFilter
+  } else if (props.listType === 'search') {
+    costFilter.value = searchList.value.costFilter
+    areaFilter.value = searchList.value.areaFilter
+  } else {
+    costFilter.value = expectList.value.costFilter
+    areaFilter.value = expectList.value.areaFilter
+  }
+}
 
 const resetFilter = () => {
   costFilter.value = ''
   areaFilter.value = ''
+
+  if (props.listType === 'category') {
+    categoryList.value.costFilter = undefined
+    categoryList.value.areaFilter = undefined
+  } else if (props.listType === 'theme') {
+    themeList.value.costFilter = undefined
+    themeList.value.areaFilter = undefined
+  } else if (props.listType === 'search') {
+    searchList.value.costFilter = undefined
+    searchList.value.areaFilter = undefined
+  } else {
+    expectList.value.costFilter = undefined
+    expectList.value.areaFilter = undefined
+  }
+}
+
+const setFilter = () => {
+  if (props.listType === 'category') {
+    categoryList.value.costFilter = costFilter.value
+    categoryList.value.areaFilter = areaFilter.value
+  } else if (props.listType === 'theme') {
+    themeList.value.costFilter = costFilter.value
+    themeList.value.areaFilter = areaFilter.value
+  } else if (props.listType === 'search') {
+    searchList.value.costFilter = costFilter.value
+    searchList.value.areaFilter = areaFilter.value
+  } else {
+    expectList.value.costFilter = costFilter.value
+    expectList.value.areaFilter = areaFilter.value
+  }
+
+  emit('setFilter', costFilter.value, areaFilter.value)
+  emit('getBrandItems')
+  closeModalAndHistoryBack()
 }
 
 const closeModal = () => {
@@ -131,6 +201,8 @@ const closeModalAndHistoryBack = () => {
 }
 
 onMounted(() => {
+  initFilter()
+
   document.body.setAttribute('style', 'overflow: hidden;')
   window.history.pushState({ page: 'modal' }, '', '#modal')
   window.addEventListener('popstate', closeModal)

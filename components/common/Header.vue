@@ -16,19 +16,12 @@
           >
             브랜드
           </div>
-          <div
-            class="menu"
-            :class="{ active: activeMenu === '상권분석' }"
-            @mouseover="showSubMenu($event, '상권분석')"
-            @mouseleave="closeSubMenu"
-          >
-            상권분석
-          </div>
+          <div class="menu">상권정보</div>
           <div class="menu">
             창업톡<img src="~/assets/img/header/community.png" alt="창업톡" />
           </div>
-          <div class="menu">성공 창업상담</div>
-          <div class="menu">오늘뭐먹지?</div>
+          <div class="menu">브랜드 MATCH</div>
+          <div class="menu">오늘 뭐 먹지?</div>
         </nav>
       </article>
       <article class="header-right">

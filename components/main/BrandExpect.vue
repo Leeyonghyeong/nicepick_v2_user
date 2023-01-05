@@ -59,8 +59,7 @@ import { useBrandListStore } from '~~/store/brandList'
 const windowStore = useWindowStore()
 const brandListStore = useBrandListStore()
 const { getDevice } = storeToRefs(windowStore)
-const { expectList, expectListPage, expectListNextPage, expectListTotalCount } =
-  storeToRefs(brandListStore)
+const { expectList } = storeToRefs(brandListStore)
 
 const router = useRouter()
 
@@ -104,10 +103,12 @@ const changePage = (type: string): void => {
 }
 
 const moveShowAllPage = () => {
-  expectList.value = []
-  expectListPage.value = 1
-  expectListNextPage.value = false
-  expectListTotalCount.value = 0
+  expectList.value.brandItems = []
+  expectList.value.page = 1
+  expectList.value.nextPage = false
+  expectList.value.totalCount = 0
+  expectList.value.areaFilter = undefined
+  expectList.value.costFilter = undefined
 
   router.push('/brand/expect')
 }

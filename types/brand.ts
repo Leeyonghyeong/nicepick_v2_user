@@ -135,3 +135,12 @@ export interface BrandEmployee {
   employees: number
   createAt: Date
 }
+
+export interface BrandList {
+  brandItems: Brand[]
+  page: number
+  nextPage: boolean
+  totalCount: number
+  costFilter?: string
+  areaFilter?: string
+}

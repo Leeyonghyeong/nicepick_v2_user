@@ -29,22 +29,9 @@
           </div>
         </div>
       </div>
-      <div class="menu drop-down-menu" @click="showDropdown(1)">
+      <div class="menu drop-down-menu">
         <div class="drop-down">
-          <div>상권분석</div>
-          <div>
-            <img
-              v-if="!isShowDropdown[1]"
-              src="~/assets/img/arrow/arrow-down.png"
-              alt="arrow"
-            />
-            <img v-else src="~/assets/img/arrow/arrow-up.png" alt="arrow" />
-          </div>
-        </div>
-        <div v-if="isShowDropdown[1]" class="drop-down-menu-list" @click.stop>
-          <div v-for="item in subMenu['상권분석']" :key="item.menuName">
-            {{ item.menuName }}
-          </div>
+          <div>상권정보</div>
         </div>
       </div>
       <div class="menu">
@@ -57,7 +44,7 @@
         </div>
       </div>
       <div class="menu">
-        <div>성공 창업상담</div>
+        <div>브랜드 MATCH</div>
       </div>
       <div class="menu">
         <div>오늘 뭐 먹지?</div>

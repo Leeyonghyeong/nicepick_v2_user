@@ -104,19 +104,23 @@ section {
           overflow: hidden;
 
           img {
+            display: block;
             width: 100%;
           }
         }
 
         .event-name {
-          margin: 10px 0 7px 0;
-          font-size: 14px;
+          margin: 14px 0 7px 0;
+          font-size: 16px;
           color: $fontMainColor;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .event-date {
           color: #bcbcbc;
-          font-size: 12px;
+          font-size: 13px;
         }
       }
     }
@@ -129,6 +133,12 @@ section {
       .event-list {
         gap: 0 23px;
         grid-template-columns: repeat(3, calc((100% - 46px) / 3));
+
+        .event-item {
+          .event-name {
+            font-size: 15px;
+          }
+        }
       }
     }
   }

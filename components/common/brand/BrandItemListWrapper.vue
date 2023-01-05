@@ -21,7 +21,7 @@ div {
 
 @include tablet {
   div {
-    gap: 50px 24px;
+    gap: 60px 24px;
     grid-template-columns: repeat(4, calc((100% - 72px) / 4));
   }
 }

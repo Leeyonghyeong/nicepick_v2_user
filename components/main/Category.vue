@@ -24,12 +24,7 @@ import { useCategoryStore } from '~~/store/category'
 const categoryStore = useCategoryStore()
 const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
-const {
-  categoryList,
-  categoryListPage,
-  categoryListNextPage,
-  categoryListTotalCount,
-} = storeToRefs(brandListStore)
+const { categoryList } = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   categoryStore.getCategory()
@@ -38,10 +33,12 @@ if (category.value.length === 0) {
 const router = useRouter()
 
 const moveCategoryPage = (l: string) => {
-  categoryList.value = []
-  categoryListPage.value = 1
-  categoryListNextPage.value = false
-  categoryListTotalCount.value = 0
+  categoryList.value.brandItems = []
+  categoryList.value.page = 1
+  categoryList.value.nextPage = false
+  categoryList.value.totalCount = 0
+  categoryList.value.areaFilter = undefined
+  categoryList.value.costFilter = undefined
   router.push(`/category/${l.replaceAll('/', '%2F')}`)
 }
 </script>

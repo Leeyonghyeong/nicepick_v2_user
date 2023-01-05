@@ -91,8 +91,7 @@ import { Brand } from '~~/types/brand'
 const windowStore = useWindowStore()
 const brandListStore = useBrandListStore()
 const { getDevice } = storeToRefs(windowStore)
-const { themeList, themeListPage, themeListNextPage, themeListTotalCount } =
-  storeToRefs(brandListStore)
+const { themeList } = storeToRefs(brandListStore)
 
 const router = useRouter()
 
@@ -138,10 +137,12 @@ const changePage = (type: string): void => {
 }
 
 const moveShowAllPage = (url: string) => {
-  themeList.value = []
-  themeListPage.value = 1
-  themeListNextPage.value = false
-  themeListTotalCount.value = 0
+  themeList.value.brandItems = []
+  themeList.value.page = 1
+  themeList.value.nextPage = false
+  themeList.value.totalCount = 0
+  themeList.value.areaFilter = undefined
+  themeList.value.costFilter = undefined
 
   router.push(url)
 }

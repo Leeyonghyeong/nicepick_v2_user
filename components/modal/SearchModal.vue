@@ -29,7 +29,12 @@
         <div class="recommend-tag">
           <div>추천 태그</div>
           <div class="tag-items">
-            <div v-for="item in currentRank" :key="item.rank" class="item">
+            <div
+              v-for="item in currentRank"
+              :key="item.rank"
+              class="item"
+              @click="moveSearchPage(item.keyword)"
+            >
               #{{ item.keyword }}
             </div>
           </div>
@@ -53,8 +58,7 @@ const emit = defineEmits<{
 const keywordRankStore = useKeywordRankStore()
 const brandListStore = useBrandListStore()
 const { currentRank } = storeToRefs(keywordRankStore)
-const { searchList, searchListPage, searchListNextPage, searchListTotalCount } =
-  storeToRefs(brandListStore)
+const { searchList } = storeToRefs(brandListStore)
 
 if (currentRank.value.length === 0) {
   keywordRankStore.addKeywordRank()
@@ -64,6 +68,15 @@ const route = useRoute()
 const router = useRouter()
 const keyword = ref<string>('')
 
+const initSearchList = () => {
+  searchList.value.brandItems = []
+  searchList.value.page = 1
+  searchList.value.nextPage = false
+  searchList.value.totalCount = 0
+  searchList.value.areaFilter = undefined
+  searchList.value.costFilter = undefined
+}
+
 const checkValidateInput = () => {
   if (keyword.value) {
     if (route.params.keyword === keyword.value) {
@@ -71,15 +84,23 @@ const checkValidateInput = () => {
       return
     }
 
-    searchList.value = []
-    searchListPage.value = 1
-    searchListNextPage.value = false
-    searchListTotalCount.value = 0
+    initSearchList()
     emit('closeSearchModal')
     router.push(`/search/${keyword.value.replaceAll('/', '%2F')}`)
   } else {
     alert('검색어를 입력해 주세요')
   }
+}
+
+const moveSearchPage = (keyword: string) => {
+  if (route.params.keyword === keyword) {
+    emit('closeSearchModal')
+    return
+  }
+
+  initSearchList()
+  emit('closeSearchModal')
+  router.push(`/search/${keyword.replaceAll('/', '%2F')}`)
 }
 
 const closeModal = () => {

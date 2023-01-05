@@ -1,7 +1,7 @@
 <template>
   <section>
     <article class="category-select-list">
-      <small v-if="getDevice !== 'mobile'">카테고리</small>
+      <small v-if="getDevice !== 'mobile'">업종</small>
       <div class="current-large-category">
         <img
           v-if="getDevice === 'mobile'"
@@ -106,10 +106,17 @@
     <CommonBrandRecommendBrandItem background-color="#f8fafd" />
 
     <article class="list">
-      <CommonBrandFilter :total-count="totalCount" />
+      <CommonBrandFilter
+        :total-count="categoryList.totalCount"
+        list-type="category"
+        @get-brand-items="getBrandItems"
+      />
 
-      <CommonBrandItemListAdWrapper>
-        <template v-for="(item, index) in brandItems" :key="item.id">
+      <CommonBrandItemListAdWrapper v-if="categoryList.brandItems.length > 0">
+        <template
+          v-for="(item, index) in categoryList.brandItems"
+          :key="item.id"
+        >
           <CommonBrandStartCostBrandItem
             :brand-item="item"
             :style="{
@@ -156,6 +163,7 @@
           />
         </template>
       </CommonBrandItemListAdWrapper>
+      <div v-else class="empty">검색 결과가 존재하지 않습니다.</div>
     </article>
     <div ref="infinity" class="observer"></div>
   </section>
@@ -174,12 +182,7 @@ const windowStore = useWindowStore()
 const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
-const {
-  categoryList: brandItems,
-  categoryListPage: page,
-  categoryListNextPage: nextPage,
-  categoryListTotalCount: totalCount,
-} = storeToRefs(brandListStore)
+const { categoryList } = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   await categoryStore.getCategory()
@@ -217,41 +220,57 @@ const scrollButtonHandler = (type: string) => {
 }
 
 const getBrandItems = async () => {
-  page.value = 1
+  categoryList.value.page = 1
   const { large, small } = route.params
   const { data } = await api.get(
     `/brand/search/category?l=${large}&s=${small}&sortType=p&type=${
       small ? 's' : 'l'
-    }&page=${page.value}&pageNum=${pageNum.value}`
+    }&page=${categoryList.value.page}&pageNum=${pageNum.value}${
+      categoryList.value.costFilter
+        ? `&costFilter=${categoryList.value.costFilter}`
+        : ''
+    }${
+      categoryList.value.areaFilter
+        ? `&areaFilter=${categoryList.value.areaFilter}`
+        : ''
+    }`
   )
 
   if (data.success) {
-    totalCount.value = data.page.totalCount
-    nextPage.value = data.page.next
-    brandItems.value = data.brand
+    categoryList.value.totalCount = data.page.totalCount
+    categoryList.value.nextPage = data.page.next
+    categoryList.value.brandItems = data.brand
   }
 }
 
 const nextBrandItems = async () => {
-  if (brandItems.value.length === 0) {
+  if (categoryList.value.brandItems.length === 0) {
     getBrandItems()
     return
   }
 
-  if (nextPage.value) {
-    page.value++
+  if (categoryList.value.nextPage) {
+    categoryList.value.page++
 
     const { large, small } = route.params
     const { data } = await api.get(
       `/brand/search/category?l=${large}&s=${small}&sortType=p&type=${
         small ? 's' : 'l'
-      }&page=${page.value}&pageNum=${pageNum.value}`
+      }&page=${categoryList.value.page}&pageNum=${pageNum.value}${
+        categoryList.value.costFilter
+          ? `&costFilter=${categoryList.value.costFilter}`
+          : ''
+      }${
+        categoryList.value.areaFilter
+          ? `&areaFilter=${categoryList.value.areaFilter}`
+          : ''
+      }`
     )
 
     if (data.success) {
-      totalCount.value = data.page.totalCount
-      nextPage.value = data.page.next
-      brandItems.value.push(...data.brand)
+      categoryList.value.totalCount = data.page.totalCount
+      categoryList.value.nextPage = data.page.next
+      categoryList.value.brandItems.push(...data.brand)
     }
   }
 }
@@ -274,10 +293,10 @@ const selectCategoryHandler = (url: string) => {
     return
   }
 
-  brandItems.value = []
-  page.value = 1
-  nextPage.value = false
-  totalCount.value = 0
+  categoryList.value.brandItems = []
+  categoryList.value.page = 1
+  categoryList.value.nextPage = false
+  categoryList.value.totalCount = 0
 
   router.push(url)
 }
@@ -287,13 +306,13 @@ const infinity = ref<HTMLDivElement | null>(null)
 
 onMounted(() => {
   initCurrentLargeCategory()
-  if (brandItems.value.length === 0) {
+  if (categoryList.value.brandItems.length === 0) {
     getBrandItems()
   }
 
   io = new IntersectionObserver(
     () => {
-      if (nextPage.value) {
+      if (categoryList.value.nextPage) {
         nextBrandItems()
       }
     },
@@ -328,8 +347,10 @@ section {
     }
 
     small {
+      display: block;
       font-size: 12px;
       color: $fontSubColor;
+      margin-bottom: 6px;
     }
 
     .current-large-category {
@@ -339,6 +360,8 @@ section {
 
       div {
         display: flex;
+        font-size: 20px;
+
         img {
           width: 24px;
           margin-left: 8px;
@@ -442,6 +465,16 @@ section {
       top: 50px;
       bottom: 28px;
     }
+
+    .empty {
+      display: flex;
+      justify-content: center;
+      color: $fontSubColor;
+      padding: {
+        top: 120px;
+        bottom: 300px;
+      }
+    }
   }
 
   @include tablet {
@@ -533,6 +566,10 @@ section {
       @include mobile-container();
       padding: {
         top: 30px;
+      }
+
+      .empty {
+        font-size: 14px;
       }
     }
   }

@@ -114,7 +114,7 @@ const { category } = storeToRefs(categoryStore)
 
   .brand-name {
     font-size: 16px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     color: $fontMainColor;
     white-space: nowrap;
     overflow: hidden;
@@ -124,13 +124,13 @@ const { category } = storeToRefs(categoryStore)
 
   .brand-start-cost {
     font-size: 13px;
-    color: $fontSubColor;
+    color: $fontMainColor;
     display: flex;
     align-items: center;
 
     div:last-child {
       font-size: 10px;
-      color: #bcbcbc;
+      color: $fontSubColor;
       padding: 3px 4px;
       background-color: #f3f3f3;
       border: 1px solid $iconLine;

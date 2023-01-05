@@ -57,15 +57,20 @@
     <CommonBrandRecommendBrandItem background-color="#f8fafd" />
 
     <article class="list">
-      <CommonBrandFilter :total-count="totalCount" />
+      <CommonBrandFilter
+        :total-count="themeList.totalCount"
+        list-type="theme"
+        @get-brand-items="getBrandItems"
+      />
 
-      <CommonBrandItemListWrapper>
+      <CommonBrandItemListWrapper v-if="themeList.brandItems.length > 0">
         <CommonBrandStartCostBrandItem
-          v-for="item in brandItems"
+          v-for="item in themeList.brandItems"
           :key="item.id"
           :brand-item="item"
         />
       </CommonBrandItemListWrapper>
+      <div v-else class="empty">검색 결과가 존재하지 않습니다.</div>
     </article>
     <div ref="infinity" class="observer"></div>
   </section>
@@ -83,12 +88,7 @@ const windowStore = useWindowStore()
 const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
-const {
-  themeList: brandItems,
-  themeListPage: page,
-  themeListNextPage: nextPage,
-  themeListTotalCount: totalCount,
-} = storeToRefs(brandListStore)
+const { themeList } = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   await categoryStore.getCategory()
@@ -102,36 +102,56 @@ const pageNum = computed<number>(() => {
 })
 
 const getBrandItems = async () => {
-  page.value = 1
+  themeList.value.page = 1
   const { type } = route.params
   const { data } = await api.get(
-    `/brand/search/theme/${type}?sortType=p&page=${page.value}&pageNum=${pageNum.value}`
+    `/brand/search/theme/${type}?sortType=p&page=${
+      themeList.value.page
+    }&pageNum=${pageNum.value}${
+      themeList.value.costFilter
+        ? `&costFilter=${themeList.value.costFilter}`
+        : ''
+    }${
+      themeList.value.areaFilter
+        ? `&areaFilter=${themeList.value.areaFilter}`
+        : ''
+    }`
   )
 
   if (data.success) {
-    totalCount.value = data.page.totalCount
-    nextPage.value = data.page.next
-    brandItems.value = data.brand
+    themeList.value.totalCount = data.page.totalCount
+    themeList.value.nextPage = data.page.next
+    themeList.value.brandItems = data.brand
   }
 }
 
 const nextBrandItems = async () => {
-  if (brandItems.value.length === 0) {
+  if (themeList.value.brandItems.length === 0) {
     getBrandItems()
     return
   }
 
-  if (nextPage.value) {
-    page.value++
+  if (themeList.value.nextPage) {
+    themeList.value.page++
     const { type } = route.params
     const { data } = await api.get(
-      `/brand/search/theme/${type}?sortType=p&page=${page.value}&pageNum=${pageNum.value}`
+      `/brand/search/theme/${type}?sortType=p&page=${
+        themeList.value.page
+      }&pageNum=${pageNum.value}${
+        themeList.value.costFilter
+          ? `&costFilter=${themeList.value.costFilter}`
+          : ''
+      }${
+        themeList.value.areaFilter
+          ? `&areaFilter=${themeList.value.areaFilter}`
+          : ''
+      }`
     )
 
     if (data.success) {
-      totalCount.value = data.page.totalCount
-      nextPage.value = data.page.next
-      brandItems.value.push(...data.brand)
+      themeList.value.totalCount = data.page.totalCount
+      themeList.value.nextPage = data.page.next
+      themeList.value.brandItems.push(...data.brand)
     }
   }
 }
@@ -141,10 +161,10 @@ const changeTheme = (type: string) => {
     return
   }
 
-  brandItems.value = []
-  page.value = 1
-  nextPage.value = false
-  totalCount.value = 0
+  themeList.value.brandItems = []
+  themeList.value.page = 1
+  themeList.value.nextPage = false
+  themeList.value.totalCount = 0
 
   router.push(`/theme/${type}`)
 }
@@ -153,13 +173,13 @@ let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)
 
 onMounted(() => {
-  if (brandItems.value.length === 0) {
+  if (themeList.value.brandItems.length === 0) {
     getBrandItems()
   }
 
   io = new IntersectionObserver(
     () => {
-      if (nextPage.value) {
+      if (themeList.value.nextPage) {
         nextBrandItems()
       }
     },
@@ -273,6 +293,16 @@ section {
       top: 50px;
       bottom: 108px;
     }
+
+    .empty {
+      display: flex;
+      justify-content: center;
+      color: $fontSubColor;
+      padding: {
+        top: 120px;
+        bottom: 300px;
+      }
+    }
   }
 
   @include tablet {
@@ -341,6 +371,10 @@ section {
       padding: {
         top: 30px;
         bottom: 30px;
+      }
+
+      .empty {
+        font-size: 14px;
       }
     }
   }

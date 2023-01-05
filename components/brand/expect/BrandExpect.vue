@@ -51,11 +51,15 @@
     </article>
 
     <article class="list">
-      <CommonBrandFilter :total-count="totalCount" />
+      <CommonBrandFilter
+        :total-count="expectList.totalCount"
+        list-type="expect"
+        @get-brand-items="getBrandItems"
+      />
 
-      <CommonBrandItemListWrapper v-if="brandItems.length > 0">
+      <CommonBrandItemListWrapper v-if="expectList.brandItems.length > 0">
         <CommonBrandStartCostBrandItem
-          v-for="(item, index) in brandItems"
+          v-for="(item, index) in expectList.brandItems"
           :key="item.id"
           :brand-item="item"
           :index="index"
@@ -79,12 +83,7 @@ const windowStore = useWindowStore()
 const brandListStore = useBrandListStore()
 const { category } = storeToRefs(categoryStore)
 const { getDevice } = storeToRefs(windowStore)
-const {
-  expectList: brandItems,
-  expectListPage: page,
-  expectListNextPage: nextPage,
-  expectListTotalCount: totalCount,
-} = storeToRefs(brandListStore)
+const { expectList } = storeToRefs(brandListStore)
 
 if (category.value.length === 0) {
   await categoryStore.getCategory()
@@ -113,40 +112,56 @@ const scrollButtonHandler = (type: string) => {
 }
 
 const getBrandItems = async () => {
-  page.value = 1
+  expectList.value.page = 1
   const { type } = route.query
   const { data } = await api.get(
-    `/brand/search/main/ad/${page.value}?pageNum=${pageNum.value}${
+    `/brand/search/main/ad/${expectList.value.page}?pageNum=${pageNum.value}${
       type ? `&type=${type}` : ''
+    }${
+      expectList.value.costFilter
+        ? `&costFilter=${expectList.value.costFilter}`
+        : ''
+    }${
+      expectList.value.areaFilter
+        ? `&areaFilter=${expectList.value.areaFilter}`
+        : ''
     }`
   )
 
   if (data.success) {
-    totalCount.value = data.page.totalCount
-    nextPage.value = data.page.next
-    brandItems.value = data.brand
+    expectList.value.totalCount = data.page.totalCount
+    expectList.value.nextPage = data.page.next
+    expectList.value.brandItems = data.brand
   }
 }
 
 const nextBrandItems = async () => {
-  if (brandItems.value.length === 0) {
+  if (expectList.value.brandItems.length === 0) {
     getBrandItems()
     return
   }
 
-  if (nextPage.value) {
-    page.value++
+  if (expectList.value.nextPage) {
+    expectList.value.page++
     const { type } = route.query
     const { data } = await api.get(
-      `/brand/search/main/ad/${page.value}?pageNum=${pageNum.value}${
+      `/brand/search/main/ad/${expectList.value.page}?pageNum=${pageNum.value}${
         type ? `&type=${type}` : ''
+      }${
+        expectList.value.costFilter
+          ? `&costFilter=${expectList.value.costFilter}`
+          : ''
+      }${
+        expectList.value.areaFilter
+          ? `&areaFilter=${expectList.value.areaFilter}`
+          : ''
       }`
     )
 
     if (data.success) {
-      totalCount.value = data.page.totalCount
-      nextPage.value = data.page.next
-      brandItems.value.push(...data.brand)
+      expectList.value.totalCount = data.page.totalCount
+      expectList.value.nextPage = data.page.next
+      expectList.value.brandItems.push(...data.brand)
     }
   }
 }
@@ -159,9 +174,9 @@ watch(
 )
 
 watch(
-  () => nextPage.value,
+  () => expectList.value.nextPage,
   () => {
-    if (page.value === 1) {
+    if (expectList.value.page === 1) {
       nextBrandItems()
     }
   }
@@ -171,13 +186,13 @@ let io: IntersectionObserver
 const infinity = ref<HTMLDivElement | null>(null)
 
 onMounted(() => {
-  if (brandItems.value.length === 0) {
+  if (expectList.value.brandItems.length === 0) {
     getBrandItems()
   }
 
   io = new IntersectionObserver(
     () => {
-      if (nextPage.value) {
+      if (expectList.value.nextPage) {
         nextBrandItems()
       }
     },
