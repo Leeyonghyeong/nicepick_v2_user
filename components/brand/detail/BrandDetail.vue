@@ -171,6 +171,7 @@
     v-if="isShowSearchModal"
     @close-search-modal="closeSearchModal"
   />
+  <ModalShareModal v-if="isShareModal" :brand="brandIntroItem" />
 </template>
 
 <script lang="ts" setup>
@@ -179,6 +180,7 @@ import { useCategoryStore } from '~~/store/category'
 import { useWindowStore } from '~~/store/window'
 import { Brand } from '~~/types/brand'
 import api from '~/config/axios.config'
+import { useModalStore } from '~~/store/modal'
 
 const props = defineProps<{
   brandIntroItem: Brand
@@ -188,9 +190,11 @@ const props = defineProps<{
 }>()
 
 const windowStore = useWindowStore()
-const { getDevice } = storeToRefs(windowStore)
 const categoryStore = useCategoryStore()
+const modalStore = useModalStore()
+const { getDevice } = storeToRefs(windowStore)
 const { category } = storeToRefs(categoryStore)
+const { isShareModal } = storeToRefs(modalStore)
 
 if (category.value.length === 0) {
   await categoryStore.getCategory()

@@ -82,7 +82,7 @@
       <div v-if="getDevice !== 'mobile'" class="button-box">
         <CommonButtonCompareButton />
         <CommonButtonFavoriteButton />
-        <CommonButtonShareButton />
+        <CommonButtonShareButton @click="isShareModal = true" />
         <CommonButtonQnaButton
           :width="getDevice === 'pc' ? 138 : getDevice === 'tablet' ? 328 : 180"
         />
@@ -106,6 +106,7 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { Brand } from '~~/types/brand'
 import { CategoryColor, LargeCategory } from '~/types/category'
 import {
@@ -114,16 +115,21 @@ import {
   calcShopCount,
   loadCategoryImg,
 } from '~/function/common'
+import { useModalStore } from '~~/store/modal'
 
 defineProps<{
   brandStatusItem: Brand
   getDevice: string
   category: LargeCategory[]
 }>()
+
+const modalStore = useModalStore()
+const { isShareModal } = storeToRefs(modalStore)
 </script>
 
 <style lang="scss" scoped>
 .brand-summary-info {
+  background-color: #fff;
   .summary-info-box {
     width: 100%;
     height: 406px;

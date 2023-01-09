@@ -666,6 +666,11 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/kakao-js-sdk@latest":
+  version "1.39.1"
+  resolved "https://registry.yarnpkg.com/@types/kakao-js-sdk/-/kakao-js-sdk-1.39.1.tgz#329773d673acc3dadd4ff9e4ba2d0a3f170b764b"
+  integrity sha512-kB0nXS97K7zFgIhLi7oDi1zeR7WV6zRNvRwtJ3KxICz8VWcuqnFYwMq1eBzyhOIJsBTCFRhB4tR1IPHKp7qcKw==
+
 "@types/node@*":
   version "18.11.9"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.9.tgz#02d013de7058cea16d36168ef2fc653464cfbad4"
@@ -5568,6 +5573,13 @@ vue-eslint-parser@^9.0.1, vue-eslint-parser@^9.1.0:
     esquery "^1.4.0"
     lodash "^4.17.21"
     semver "^7.3.6"
+
+vue-kakao-sdk@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/vue-kakao-sdk/-/vue-kakao-sdk-0.2.5.tgz#177321f18c62150950424b6c02aa39d92bdcf47e"
+  integrity sha512-Mw5cIC/XQvfsaGZ/7MtWg5kKvN4W3GixfNXyOGmh9SYwAXDGRjsansZQ6kWUfnFnxe3VFHmty2mviln/gsnW+Q==
+  dependencies:
+    "@types/kakao-js-sdk" latest
 
 vue-router@^4.1.6:
   version "4.1.6"

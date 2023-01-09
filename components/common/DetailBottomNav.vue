@@ -3,7 +3,7 @@
     <div class="wrapper">
       <CommonButtonCompareButton />
       <CommonButtonFavoriteButton />
-      <CommonButtonShareButton />
+      <CommonButtonShareButton @click="isShareModal = true" />
       <CommonButtonQnaButton :width="180" />
     </div>
   </nav>
@@ -11,10 +11,13 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
+import { useModalStore } from '~~/store/modal'
 import { useWindowStore } from '~~/store/window'
 
 const windowStore = useWindowStore()
+const modalStore = useModalStore()
 const { getDevice } = storeToRefs(windowStore)
+const { isShareModal } = storeToRefs(modalStore)
 </script>
 
 <style lang="scss" scoped>
