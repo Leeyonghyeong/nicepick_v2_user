@@ -1,15 +1,8 @@
 <template>
   <section>
     <article class="theme-select-list">
-      <small v-if="getDevice !== 'mobile'">테마별로 만나는 브랜드</small>
-      <div class="current-theme">
-        <img
-          v-if="getDevice === 'mobile'"
-          src="~/assets/img/arrow/router-back.png"
-          alt="back"
-          class="back"
-          @click="router.push('/')"
-        />
+      <div v-if="getDevice !== 'mobile'" class="current-theme">
+        <small>테마별로 만나는 브랜드</small>
         <div>
           {{
             route.params.type === '무인'
@@ -22,6 +15,18 @@
           }}
         </div>
       </div>
+      <CommonMobileRouterMainHeader
+        v-else
+        :title="
+          route.params.type === '무인'
+            ? '무인창업, 지금은 언택트 시대!'
+            : route.params.type === '신생'
+            ? '응애~ 새로운 시작! 신생브랜드'
+            : route.params.type === '초보'
+            ? '초보창업? 오히려 좋아!'
+            : '띵똥! 배달왔습니다~ 배달특화!'
+        "
+      />
       <div class="theme-list">
         <div
           class="theme-item"
@@ -212,24 +217,20 @@ section {
       bottom: 30px;
     }
 
-    small {
-      font-size: 12px;
-      color: $fontSubColor;
-    }
-
     .current-theme {
-      margin-top: 6px;
       display: flex;
+      flex-direction: column;
       position: relative;
-      align-items: center;
+
+      small {
+        font-size: 12px;
+        color: $fontSubColor;
+      }
 
       div {
         display: flex;
-        img {
-          width: 24px;
-          margin-left: 8px;
-          cursor: pointer;
-        }
+        margin-top: 6px;
+        font-size: 20px;
       }
     }
 
@@ -309,10 +310,6 @@ section {
     .theme-select-list {
       width: 100%;
 
-      small {
-        @include tablet-container();
-      }
-
       .current-theme {
         @include tablet-container();
 
@@ -344,21 +341,6 @@ section {
       top: 0;
       background-color: #fff;
       z-index: 103;
-
-      .current-theme {
-        @include mobile-container();
-        display: flex;
-        width: 100%;
-        height: 60px;
-        border-bottom: 1px solid $sectionLine;
-        color: $fontMainColor;
-
-        .back {
-          width: 30px;
-          left: 24px;
-          margin-right: 8px;
-        }
-      }
 
       .theme-list {
         @include mobile-container();

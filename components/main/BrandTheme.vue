@@ -233,7 +233,7 @@ section {
   @include tablet {
     article {
       @include tablet-container();
-      margin-top: 50px;
+      margin-top: 60px;
 
       .top {
         display: block;
@@ -276,7 +276,7 @@ section {
       }
 
       .theme-list {
-        margin-bottom: 50px;
+        margin-bottom: 60px;
       }
     }
   }

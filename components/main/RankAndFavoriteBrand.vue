@@ -330,8 +330,8 @@ section {
     .rank-favorite {
       @include tablet-container();
       flex-direction: column;
-      margin-top: 50px;
-      margin-bottom: 50px;
+      margin-top: 60px;
+      margin-bottom: 60px;
 
       h1 {
         height: auto;
@@ -345,7 +345,7 @@ section {
           padding: 23px 0;
           flex-wrap: wrap;
           align-items: center;
-          margin-bottom: 50px;
+          margin-bottom: 60px;
 
           .rank-item {
             width: calc(100% / 2.5);

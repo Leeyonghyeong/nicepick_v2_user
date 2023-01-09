@@ -1,17 +1,14 @@
 <template>
   <section>
     <article class="brand-expect-top">
-      <small v-if="getDevice !== 'mobile'">앞으로가 기대되는</small>
-      <div class="brand-expect-notice">
-        <img
-          v-if="getDevice === 'mobile'"
-          src="~/assets/img/arrow/router-back.png"
-          alt="back"
-          class="back"
-          @click="router.push('/')"
-        />
+      <div v-if="getDevice !== 'mobile'" class="brand-expect-notice">
+        <small>앞으로가 기대되는</small>
         <div>유망브랜드</div>
       </div>
+      <CommonMobileRouterMainHeader
+        v-else
+        title="앞으로가 기대되는 유망브랜드"
+      />
       <div ref="largeCategoryList" class="large-category-list">
         <div class="large-item" :class="{ active: !route.query.type }">
           <NuxtLink to="/brand/expect" style="height: 20px">전체 </NuxtLink>
@@ -90,7 +87,6 @@ if (category.value.length === 0) {
 }
 
 const route = useRoute()
-const router = useRouter()
 
 const largeCategoryList = ref<HTMLDivElement | null>(null)
 const isShowButtonLeft = ref<boolean>(false)
@@ -226,25 +222,20 @@ section {
       bottom: 30px;
     }
 
-    small {
-      font-size: 12px;
-      color: $fontSubColor;
-    }
-
     .brand-expect-notice {
       display: flex;
+      flex-direction: column;
       position: relative;
-      align-items: center;
+
+      small {
+        font-size: 12px;
+        color: $fontSubColor;
+      }
 
       div {
         display: flex;
         margin-top: 6px;
-
-        img {
-          width: 24px;
-          margin-left: 8px;
-          cursor: pointer;
-        }
+        font-size: 20px;
       }
 
       .large-category-list {
@@ -365,10 +356,6 @@ section {
     .brand-expect-top {
       width: 100%;
 
-      small {
-        @include tablet-container();
-      }
-
       .brand-expect-notice {
         @include tablet-container();
 
@@ -404,46 +391,6 @@ section {
       top: 0;
       background-color: #fff;
       z-index: 103;
-
-      .brand-expect-notice {
-        @include mobile-container();
-        position: relative;
-        width: 100%;
-        justify-content: center;
-        height: 60px;
-        border-bottom: 1px solid $sectionLine;
-
-        .back {
-          width: 30px;
-          position: absolute;
-          left: 24px;
-        }
-
-        .large-category-list {
-          position: absolute;
-          padding: 0;
-          top: 0;
-          margin-top: 60px;
-          border: 0;
-          height: 100vh;
-          width: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          border-radius: 0;
-          display: grid;
-          grid-template-columns: repeat(2, calc(100% / 2));
-          grid-template-rows: repeat(5, 50px);
-
-          .large-item {
-            display: inline;
-            margin: 0;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-          }
-        }
-      }
 
       .large-category-list {
         @include mobile-container();

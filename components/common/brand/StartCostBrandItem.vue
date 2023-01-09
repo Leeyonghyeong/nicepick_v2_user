@@ -150,7 +150,7 @@ const { category } = storeToRefs(categoryStore)
       margin-bottom: 10px;
     }
     .brand-name {
-      font-size: 13px;
+      font-size: 14px;
     }
     .brand-start-cost {
       flex-direction: column;

@@ -72,8 +72,8 @@ section {
   @include tablet {
     article {
       @include tablet-container();
-      margin-top: 50px;
-      margin-bottom: 50px;
+      margin-top: 60px;
+      margin-bottom: 60px;
       gap: 0 24px;
       grid-template-columns: repeat(2, (calc((100% - 24px) / 2)));
 

@@ -524,6 +524,10 @@ section {
         height: 60px;
         border-bottom: 1px solid $sectionLine;
 
+        div {
+          font-size: 16px;
+        }
+
         .back {
           width: 30px;
           position: absolute;

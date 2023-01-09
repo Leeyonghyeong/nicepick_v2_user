@@ -24,7 +24,11 @@
           </div>
         </div>
         <div v-if="isShowDropdown[0]" class="drop-down-menu-list" @click.stop>
-          <div v-for="item in subMenu['브랜드']" :key="item.menuName">
+          <div
+            v-for="item in subMenu['브랜드']"
+            :key="item.menuName"
+            @click=";[$router.push(item.url), closeModal()]"
+          >
             {{ item.menuName }}
           </div>
         </div>

@@ -91,11 +91,11 @@
 
     <div class="consulting">
       <div v-if="getDevice !== 'mobile'" class="text">
-        <div>프랜차이즈 창업 고민된다면</div>
-        <div>성공 창업상담</div>
+        <div>나의 맞춤브랜드 찾기</div>
+        <div>브랜드 MATCH</div>
       </div>
       <div v-else class="text">
-        <div>성공 창업상담 받기 ></div>
+        <div>나의 맞춤 브랜드 MATCH ></div>
       </div>
 
       <div class="image">
@@ -268,9 +268,10 @@ defineProps<{
     }
 
     .image {
+      height: 100%;
       img {
         display: block;
-        width: 112px;
+        height: 100%;
       }
     }
   }
@@ -350,10 +351,6 @@ defineProps<{
             font-weight: 400;
           }
         }
-      }
-
-      .image {
-        margin-top: -12px;
       }
     }
   }

@@ -129,7 +129,7 @@ watch(
 section {
   article {
     @include pc-container();
-    margin-top: 50px;
+    margin-top: 80px;
 
     &.list {
       margin-top: 0px;
@@ -172,9 +172,10 @@ section {
   @include tablet {
     article {
       @include tablet-container();
+      margin-top: 60px;
 
       &.list {
-        margin-bottom: 50px;
+        margin-bottom: 60px;
       }
     }
   }

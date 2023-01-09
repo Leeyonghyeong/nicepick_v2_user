@@ -3,7 +3,7 @@
     <section>
       <article class="qna">
         <div class="qna-info">
-          <div>고객센터 031-889-0142</div>
+          <div>고객센터 070-8287-2281</div>
           <div>(운영시간 10:00~20:00 주말, 공휴일 휴무)</div>
         </div>
         <div class="footer-images">
@@ -55,11 +55,13 @@
         </div>
         <div class="info">
           <div>
-            (주)삼화이노랩 대표이사 : 원용철 이메일 : nice1pick@gmail.com
+            (주)삼화이노랩 대표이사 : 원용철&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            이메일 : nice1pick@gmail.com
           </div>
           <div>
-            사업자등록번호 : 242-87-02414 통신판매업 : 제2022 - 서울강남 -
-            00663호 서울특별시 강남구 테헤란로 82길15 디아이타워 6층 686
+            사업자등록번호 : 242-87-02414&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            통신판매업 : 제2022 - 서울강남 - 00663호&nbsp;&nbsp;&nbsp;&nbsp;
+            서울특별시 강남구 테헤란로 82길15 디아이타워 6층 686
           </div>
           <div>Copyright © nicepick.co.kr. All rights reserved.</div>
         </div>

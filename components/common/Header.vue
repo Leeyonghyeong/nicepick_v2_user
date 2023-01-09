@@ -10,7 +10,11 @@
         <nav class="main-menu">
           <div
             class="menu"
-            :class="{ active: activeMenu === '브랜드' }"
+            :class="{
+              active:
+                activeMenu === '브랜드' ||
+                subMenu['브랜드'].find((e) => e.url === $route.path),
+            }"
             @mouseover="showSubMenu($event, '브랜드')"
             @mouseleave="closeSubMenu"
           >
@@ -54,7 +58,12 @@
       @mouseleave="closeSubMenu"
     >
       <nav ref="subMenuEl" class="sub-menu">
-        <div v-for="item in subMenu[currentMenu]" :key="item.menuName">
+        <div
+          v-for="item in subMenu[currentMenu]"
+          :key="item.menuName"
+          :class="{ active: $route.path === item.url }"
+          @click=";[$router.push(item.url), closeSubMenu()]"
+        >
           {{ item.menuName }}
         </div>
       </nav>
@@ -84,13 +93,9 @@ type SubMenu = {
 
 const subMenu: SubMenu = {
   브랜드: [
-    { menuName: '프로모션', url: '' },
+    { menuName: '프로모션', url: '/brand/promotion' },
     { menuName: '지역별 브랜드 랭킹', url: '' },
     { menuName: '브랜드 비교', url: '' },
-  ],
-  상권분석: [
-    { menuName: '상권분석지도', url: '' },
-    { menuName: '유사상권분석', url: '' },
   ],
 }
 
@@ -302,7 +307,8 @@ header {
         cursor: pointer;
         font-size: 14px;
 
-        &:hover {
+        &:hover,
+        &.active {
           color: $mainColor;
         }
       }

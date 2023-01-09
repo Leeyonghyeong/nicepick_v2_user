@@ -12,6 +12,8 @@ export interface Brand {
   brandPromotionIcon: string
   webUrl: string
   count: number
+  createAt: Date
+  updateAt: Date
   brandYoutube: BrandYoutube[]
   brandIntroImg: BrandIntroImg[]
   brandMenuImg: BrandMenuImg[]

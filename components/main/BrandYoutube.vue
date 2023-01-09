@@ -275,7 +275,7 @@ section {
   section {
     padding-top: 43px;
     padding-bottom: 43px;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
     height: auto;
 
     article {
