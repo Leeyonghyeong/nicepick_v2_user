@@ -237,37 +237,6 @@ section {
         margin-top: 6px;
         font-size: 20px;
       }
-
-      .large-category-list {
-        position: absolute;
-        z-index: 1;
-        top: 34px;
-        left: 0;
-        border: 1px solid #ebebeb;
-        background-color: #fff;
-        border-radius: 10px;
-        flex-direction: column;
-        padding: 15px;
-
-        .large-item {
-          margin-bottom: 23px;
-          cursor: pointer;
-          font-size: 14px;
-
-          a {
-            color: $fontSubColor;
-            text-decoration: none;
-
-            &.active {
-              color: $mainColor;
-            }
-          }
-
-          &:last-child {
-            margin-bottom: 0;
-          }
-        }
-      }
     }
 
     .large-category-list {

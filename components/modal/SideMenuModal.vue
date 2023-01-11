@@ -2,7 +2,7 @@
   <section class="side-menu-bar" @click="$emit('showAndCloseSideMenuModal')">
     <div class="side-menu" @click.stop>
       <div class="side-menu-top menu">
-        <div><button>기업 홈</button></div>
+        <div><button>기업 서비스</button></div>
         <div>
           <img
             src="~/assets/img/close/close_black.png"
@@ -131,8 +131,8 @@ const showDropdown = (index: number): void => {
         padding: 0 44px 0 30px;
 
         button {
-          width: 57px;
-          height: 36px;
+          font-size: 13px;
+          padding: 10px;
           color: #3d50cb;
           border: 1px solid #3d50cb;
           border-radius: 5px;

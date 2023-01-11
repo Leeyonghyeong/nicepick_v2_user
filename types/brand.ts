@@ -12,6 +12,8 @@ export interface Brand {
   brandPromotionIcon: string
   webUrl: string
   count: number
+  maxShopCount: number
+  minShopCount: number
   createAt: Date
   updateAt: Date
   brandYoutube: BrandYoutube[]

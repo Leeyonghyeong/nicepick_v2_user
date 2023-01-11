@@ -37,11 +37,19 @@ export const useBrandListStore = defineStore('brandList', () => {
     totalCount: 0,
   })
 
+  const rankList = ref<BrandList>({
+    brandItems: [],
+    page: 1,
+    nextPage: false,
+    totalCount: 0,
+  })
+
   return {
     categoryList,
     searchList,
     themeList,
     expectList,
     promotionList,
+    rankList,
   }
 })

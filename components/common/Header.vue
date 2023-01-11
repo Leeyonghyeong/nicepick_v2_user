@@ -48,7 +48,7 @@
             @click="showAndCloseSideMenuModal"
           />
         </div>
-        <div id="pCompany"><button>기업 홈</button></div>
+        <div id="pCompany"><button>기업 서비스</button></div>
       </article>
     </section>
     <section
@@ -94,8 +94,8 @@ type SubMenu = {
 const subMenu: SubMenu = {
   브랜드: [
     { menuName: '프로모션', url: '/brand/promotion' },
-    { menuName: '지역별 브랜드 랭킹', url: '' },
-    { menuName: '브랜드 비교', url: '' },
+    { menuName: '지역별 브랜드 랭킹', url: '/brand/rank' },
+    { menuName: '브랜드 비교', url: '/brand/compare' },
   ],
 }
 
