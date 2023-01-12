@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { BrandList } from '~~/types/brand'
+import { Brand, BrandList } from '~~/types/brand'
 
 export const useBrandListStore = defineStore('brandList', () => {
   const categoryList = ref<BrandList>({
@@ -44,6 +44,8 @@ export const useBrandListStore = defineStore('brandList', () => {
     totalCount: 0,
   })
 
+  const compareList = ref<Brand[]>([])
+
   return {
     categoryList,
     searchList,
@@ -51,5 +53,6 @@ export const useBrandListStore = defineStore('brandList', () => {
     expectList,
     promotionList,
     rankList,
+    compareList,
   }
 })

@@ -1,18 +1,24 @@
 <template>
-  <main>
-    <BrandDetail
-      v-if="brandIntroItem && brandStatusItem && brandCompanyItem"
-      :brand-intro-item="brandIntroItem"
-      :brand-status-item="brandStatusItem"
-      :brand-company-item="brandCompanyItem"
-      :brand-same-list-items="brandSameListItems || []"
-    />
-  </main>
+  <div>
+    <main>
+      <BrandDetail
+        v-if="brandIntroItem && brandStatusItem && brandCompanyItem"
+        :brand-intro-item="brandIntroItem"
+        :brand-status-item="brandStatusItem"
+        :brand-company-item="brandCompanyItem"
+        :brand-same-list-items="brandSameListItems || []"
+      />
+    </main>
+    <Footer />
+    <DetailBottomNav :brand="brandStatusItem!" />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { Brand } from '~~/types/brand'
 import api from '~/config/axios.config'
+import DetailBottomNav from '~~/components/common/DetailBottomNav.vue'
+import Footer from '~~/components/common/Footer.vue'
 
 definePageMeta({
   layout: 'brand-detail',

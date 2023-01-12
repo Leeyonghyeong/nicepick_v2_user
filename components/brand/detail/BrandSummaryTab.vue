@@ -80,7 +80,7 @@
       </div>
 
       <div v-if="getDevice !== 'mobile'" class="button-box">
-        <CommonButtonCompareButton />
+        <CommonButtonCompareButton :brand="brandStatusItem" />
         <CommonButtonFavoriteButton />
         <CommonButtonShareButton @click="isShareModal = true" />
         <CommonButtonQnaButton

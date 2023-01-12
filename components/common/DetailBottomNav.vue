@@ -1,7 +1,7 @@
 <template>
   <nav v-if="getDevice === 'mobile'" class="detail-bottom-nav">
     <div class="wrapper">
-      <CommonButtonCompareButton />
+      <CommonButtonCompareButton :brand="brand" />
       <CommonButtonFavoriteButton />
       <CommonButtonShareButton @click="isShareModal = true" />
       <CommonButtonQnaButton :width="180" />
@@ -13,6 +13,11 @@
 import { storeToRefs } from 'pinia'
 import { useModalStore } from '~~/store/modal'
 import { useWindowStore } from '~~/store/window'
+import { Brand } from '~~/types/brand'
+
+defineProps<{
+  brand: Brand
+}>()
 
 const windowStore = useWindowStore()
 const modalStore = useModalStore()

@@ -14,6 +14,7 @@ export interface Brand {
   count: number
   maxShopCount: number
   minShopCount: number
+  color?: string
   createAt: Date
   updateAt: Date
   brandYoutube: BrandYoutube[]
